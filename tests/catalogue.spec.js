@@ -11,10 +11,9 @@ test('complete imported catalogue, category filtering, pagination and stock mana
  expect((await (await request.get('/api/products?page=1&q=%27%20OR%201%3D1--')).json()).total).toBe(0);
  expect((await (await request.get('/api/products?page=1&q=%25')).json()).total).toBeLessThan(first.total);
  const candidate=second.items.find(p=>p.source_variant_id);expect(candidate).toBeTruthy();const original=await (await request.get('/api/products/'+candidate.id)).json();expect(original.stock).toBe(10);expect(original.price).toBeGreaterThan(0);expect(JSON.parse(original.images_json).length).toBeGreaterThan(0);
- // Exercise search and an exact collection through the real UI.
- await page.goto('/');await expect(page.locator('#products .product')).toHaveCount(24);await expect(page.locator('#collection-filter option')).toHaveCount(692);
- await page.locator('#collection-filter').selectOption('a-derma');await expect(page.locator('#catalogue-count')).toHaveText(filtered.total+' références et formats');
- await page.locator('#collection-filter').selectOption('');await page.getByRole('button',{name:'Suivant →',exact:true}).click();await expect(page.locator('#catalogue-pagination')).toContainText('Page 2 /');
+ // The simplified category bar replaces the old collection dropdown.
+ await page.goto('/');await expect(page.locator('#products .product')).toHaveCount(24);await expect(page.locator('#collection-filter')).toHaveCount(0);
+ await page.getByRole('button',{name:'Suivant →',exact:true}).click();await expect(page.locator('#catalogue-pagination')).toContainText('Page 2 /');
  await page.getByRole('button',{name:`Ajouter ${candidate.name} au panier`,exact:true}).click();
  // The cart must resolve its own IDs, even after the visible catalogue changes.
  await page.getByLabel('Rechercher un produit').fill('zzzz-nothing-exists');await expect(page.getByRole('heading',{name:'Aucun soin trouvé'})).toBeVisible();
@@ -39,4 +38,21 @@ test('thirteen source categories and the compact category menu remain accessible
  await page.getByRole('button',{name:'Découvrir Minceur',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts.Minceur.formats+' références et formats');
  await page.getByRole('button',{name:'Découvrir K-beauty',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts['K-beauty'].formats+' références et formats');
  await expect(page.locator('[data-filter]')).toHaveCount(14);
+});
+
+
+test('category toolbar stays visible while scrolling and filters without returning to the hero',async({page})=>{
+ const bar=page.locator('.catalogue-toolbar');
+ for(const width of [1280,390]){
+  await page.setViewportSize({width,height:800});await page.goto('/');await expect(page.locator('#products .product')).toHaveCount(24);
+  await page.locator('#products .product').nth(8).scrollIntoViewIfNeeded();
+  const top=await bar.evaluate(e=>e.getBoundingClientRect().top);expect(top).toBeGreaterThanOrEqual(-1);expect(top).toBeLessThanOrEqual(1);
+  await Promise.all([page.waitForResponse(r=>r.url().includes('/api/products?')&&new URL(r.url()).searchParams.get('category')==='Homme'),page.locator('[data-filter="Homme"]').click()]);
+  await expect(page.locator('[data-filter="Homme"]')).toHaveClass('selected');await expect(page.locator('#products .product-category').first()).toHaveText('Homme');
+  await expect.poll(()=>bar.evaluate(e=>e.getBoundingClientRect().top)).toBeLessThanOrEqual(14);
+  expect(await page.evaluate(()=>scrollY)).toBeGreaterThan(300);
+  await page.screenshot({path:`test-results/sticky-categories-${width}.png`});
+  await Promise.all([page.waitForResponse(r=>r.url().includes('/api/products?')&&new URL(r.url()).searchParams.get('category')==='Tous'),page.locator('[data-filter="Tous"]').click()]);
+  await expect(page.locator('#products .product-category')).toHaveCount(0);
+ }
 });
