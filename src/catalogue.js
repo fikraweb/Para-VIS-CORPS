@@ -8,6 +8,12 @@ export async function catalogue(db,url,admin=false){
   if(!ids.length)return [];
   where.push(`p.id IN (${ids.map(()=>'?').join(',')})`);values.push(...ids);
  }
+ if(search.has('source_ids')){
+ const ids=search.get('source_ids').split(',').filter(Boolean);
+ if(ids.length>12||ids.some(id=>!/^\d{1,20}$/.test(id)))throw Error('Invalid source IDs');
+ if(!ids.length)return [];
+ where.push(`p.source_product_id IN (${ids.map(()=>'?').join(',')})`);values.push(...ids);
+ }
  const q=(search.get('q')||'').trim().slice(0,150);
  if(q){where.push('(instr(lower(p.name),lower(?))>0 OR instr(lower(p.brand),lower(?))>0 OR instr(lower(COALESCE(p.sku,\'\')),lower(?))>0)');values.push(q,q,q);}
  const category=search.get('category');if(category&&category!=='Tous'){

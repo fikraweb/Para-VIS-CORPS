@@ -56,3 +56,12 @@ test('category toolbar stays visible while scrolling and filters without returni
   await expect(page.locator('#products .product-category')).toHaveCount(0);
  }
 });
+
+test('discovery campaigns show current prices and open purchasable products outside the current page',async({page,request})=>{
+ const products=await (await request.get('/api/products?source_ids=8036739055791,6728782446767,6729087844527,6728969552047,6729103081647')).json();expect(products).toHaveLength(5);const glow=products.find(p=>p.source_product_id==='8036739055791');
+ await page.goto('/');const featured=page.locator('.campaign-glow [data-featured="glow"]');await expect(featured).toBeEnabled();await expect(page.locator('.campaign-glow [data-featured-price="glow"]')).toHaveText((glow.price/100).toLocaleString('fr-MA',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH');await expect(page.locator('.discovery-aside')).toBeVisible();
+ await featured.click();await expect(page.locator('dialog').getByRole('heading',{name:glow.name,exact:true})).toBeVisible();await page.locator('dialog').getByRole('button',{name:'Ajouter au panier',exact:true}).click();await page.getByRole('button',{name:'Fermer',exact:true}).click();await page.getByRole('button',{name:/Panier/}).click();await expect(page.locator('dialog')).toContainText(glow.name);await page.locator('[data-remove]').click();await expect(page.locator('dialog')).toContainText('Votre panier attend vos premiers essentiels.');await page.getByRole('button',{name:'Fermer',exact:true}).click();
+ await page.locator('.campaign-body [data-category="Corps & Bains"]').click();await expect(page.locator('[data-filter="Corps & Bains"]')).toHaveAttribute('aria-pressed','true');
+ await page.getByText('Comment régler ma commande ?', {exact:true}).click();await expect(page.locator('.store-faq details[open]')).toContainText('Le paiement se fait à la livraison.');
+ await page.setViewportSize({width:390,height:844});await expect(page.locator('.discovery-aside')).toBeHidden();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+});
