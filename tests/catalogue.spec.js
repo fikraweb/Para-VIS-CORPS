@@ -65,3 +65,16 @@ test('discovery campaigns show current prices and open purchasable products outs
  await page.getByText('Comment régler ma commande ?', {exact:true}).click();await expect(page.locator('.store-faq details[open]')).toContainText('Le paiement se fait à la livraison.');
  await page.setViewportSize({width:390,height:844});await expect(page.locator('.discovery-aside')).toBeHidden();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
 });
+
+test('menu and cart dismiss on outside clicks without dismissing inside clicks',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('/');
+ const toggle=page.getByRole('button',{name:'Ouvrir le menu'});
+ await toggle.click();await expect(toggle).toHaveAttribute('aria-expanded','true');
+ await page.locator('#main-nav').click({position:{x:5,y:5}});await expect(toggle).toHaveAttribute('aria-expanded','true');
+ await page.locator('.announcement').click();await expect(toggle).toHaveAttribute('aria-expanded','false');
+ await toggle.click();await page.keyboard.press('Escape');await expect(toggle).toHaveAttribute('aria-expanded','false');
+ await page.locator('#open-cart').click();const dialog=page.locator('#cart-dialog');await expect(dialog).toBeVisible();
+ await page.getByRole('heading',{name:'Mon panier'}).click();await expect(dialog).toBeVisible();
+ await page.mouse.click(2,2);await expect(dialog).not.toBeVisible();
+ await page.locator('#open-cart').click();await expect(dialog).toBeVisible();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
+});
