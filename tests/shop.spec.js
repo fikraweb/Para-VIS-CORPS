@@ -10,7 +10,7 @@ test('secure catalogue, checkout, dashboard and inventory workflow',async({page,
  r=await request.post('/api/orders',{data:{}});expect(r.status()).toBe(403);
  r=await request.post('/api/orders',{headers:origin,data:{name:'Test',phone:'bad',city:'Rabat',address:'Adresse',items:[{id:p.id,quantity:1}]}});expect(r.status()).toBe(400);
  r=await request.post('/api/orders',{headers:origin,data:{name:'Test',phone:'0612345678',city:'Rabat',address:'Adresse test',items:[{id:p.id,quantity:4}]}});expect(r.status()).toBe(409);
- await page.goto('/');await expect(page.getByRole('heading',{name:'Le soin de vous. La beauté en plus.'})).toBeVisible();
+ await page.goto('/');await expect(page.getByRole('heading',{name:'Découvrez l’univers Para-VIS’CORPS'})).toBeVisible();
  await page.getByRole('button',{name:`Ajouter ${name} au panier`}).click();await page.getByRole('button',{name:/Panier/}).click();
  await page.getByLabel('Nom complet').fill('Cliente test');await page.getByLabel('Téléphone',{exact:true}).fill('0612345678');await page.getByLabel('Ville',{exact:true}).fill('Rabat');await page.getByLabel('Adresse de livraison').fill('10 Rue des tests');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Confirmer ma commande'}).click();
  await expect(page.getByRole('heading',{name:'Merci pour votre confiance.'})).toBeVisible();const confirmation=await page.locator('dialog strong').textContent();
