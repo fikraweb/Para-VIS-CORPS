@@ -180,3 +180,29 @@
 @media(max-width:700px){.orbit-icon{width:65px;height:69px}.orbit-category{width:98px;min-height:113px}.orbit-name{font-size:12px;max-width:98px}.orbit-brand-logo{width:86%}}
 @media(max-width:400px){.orbit-icon{width:57px;height:61px;margin-top:9px}.orbit-category{width:82px;min-height:98px;gap:8px}.orbit-name{font-size:10px;max-width:82px}.orbit-center small{font-size:4px;letter-spacing:.4px}}
 @media(max-width:360px){.orbit-icon{width:48px;height:52px;margin-top:8px}.orbit-icon::before{top:-11px;height:17px}.orbit-category{width:72px;min-height:89px;gap:7px}.orbit-name{font-size:9px;max-width:72px}.orbit-center{padding:5px;gap:2px}.orbit-center small{font-size:3.5px}}
+/* Floating product photography with framed editorial labels */
+.orbit-category{width:136px;min-height:151px;gap:8px}
+.orbit-icon{width:120px;height:112px;margin-top:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;isolation:auto;mix-blend-mode:multiply;overflow:visible}
+.orbit-icon::before{content:none}
+.orbit-icon::after{left:22%;right:22%;bottom:1%;height:6%;background:#55412242;filter:blur(6px);border-radius:50%;transform:translateZ(-4px)}
+.orbit-icon img{inset:0;width:100%;height:100%;border-radius:0;clip-path:none;object-fit:contain;mix-blend-mode:multiply;filter:contrast(1.045);transform:translateZ(28px) translateY(-3px)}
+.orbit-category:hover .orbit-icon,.orbit-category:focus-visible .orbit-icon,.orbit-category.active .orbit-icon{box-shadow:none;border:0}
+.orbit-name{display:flex;align-items:center;justify-content:center;position:relative;min-height:30px;max-width:136px;min-width:100px;padding:7px 10px;border:1px solid #ad8c5099;border-radius:4px 11px 4px 11px;background:linear-gradient(135deg,#fffbf0f0,#e9d5a8e0);box-shadow:inset 0 1px 0 #fffef6,0 3px 0 #ae905126,0 7px 13px #70542c16;font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:700;letter-spacing:.2px;line-height:1.12;color:#41492c;text-shadow:0 1px 0 #fff8df;transition:box-shadow .25s,border-color .25s}
+.orbit-category:hover .orbit-name,.orbit-category.active .orbit-name{border-color:#977538;box-shadow:inset 0 1px 0 #fffef6,0 3px 0 #ae905126,0 9px 18px #70542c2c}
+@media(max-width:1000px){.orbit-category{width:105px;min-height:120px;gap:6px}.orbit-icon{width:86px;height:84px;margin-top:0}.orbit-name{font-size:12px;min-width:78px;max-width:105px;min-height:27px;padding:6px 8px}}
+@media(max-width:700px){.orbit-category{width:106px;min-height:127px;gap:6px}.orbit-icon{width:91px;height:89px}.orbit-name{font-size:12px;min-width:83px;max-width:106px;padding:6px 8px}}
+@media(max-width:400px){.orbit-category{width:87px;min-height:111px;gap:5px}.orbit-icon{width:75px;height:78px}.orbit-name{font-size:10.5px;min-width:69px;max-width:87px;min-height:25px;padding:5px 6px;border-radius:3px 8px 3px 8px}}
+@media(max-width:360px){.orbit-category{width:75px;min-height:97px;gap:4px}.orbit-icon{width:63px;height:66px}.orbit-name{font-size:9px;min-width:59px;max-width:75px;min-height:23px;padding:5px 5px}}
+/* Give the larger photographs room around the ring. */
+.category-orbit{margin-top:35px}
+.orbit-category{mix-blend-mode:multiply}
+.orbit-category-0{left:50%;top:9%}.orbit-category-1{left:76.35%;top:18.59%}.orbit-category-2{left:90.38%;top:42.88%}.orbit-category-3{left:85.51%;top:70.5%}.orbit-category-4{left:64.02%;top:88.53%}.orbit-category-5{left:35.98%;top:88.53%}.orbit-category-6{left:14.49%;top:70.5%}.orbit-category-7{left:9.62%;top:42.88%}.orbit-category-8{left:23.65%;top:18.59%}
+.orbit-icon{width:116px;height:100px}
+.orbit-category{min-height:139px;gap:7px}
+.orbit-ring-outer{width:82%;height:82%}
+@media(max-width:1000px){.orbit-icon{width:85px;height:77px}.orbit-category{min-height:113px;gap:6px}}
+@media(max-width:700px){.orbit-icon{width:90px;height:82px}.orbit-category{min-height:118px}.category-orbit{margin-top:32px}}
+@media(max-width:400px){.orbit-icon{width:75px;height:73px}.orbit-category{min-height:105px;gap:5px}}
+@media(max-width:360px){.orbit-icon{width:63px;height:62px}.orbit-category{min-height:92px;gap:4px}}
+.orbit-category{mix-blend-mode:normal}
+@media(max-width:600px){.category-orbit{aspect-ratio:.9}.hero-category-copy{padding-top:35px}}
