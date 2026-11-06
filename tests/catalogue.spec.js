@@ -29,11 +29,11 @@ test('complete imported catalogue, category filtering, pagination and stock mana
  }finally{await request.post('/api/login',{headers:origin,data:{password:'local-test-password-only'}});const restore=await request.post('/api/admin/products',{headers:origin,data:original});expect(restore.ok()).toBeTruthy();}
 });
 
-test('thirteen source categories and both catalogue book pages remain accessible',async({page,request})=>{
+test('thirteen source categories and the compact category menu remain accessible',async({page,request})=>{
  const counts=JSON.parse(fs.readFileSync('navigation-category-counts.json','utf8'));
  const names=Object.keys(counts);
  for(const name of names){const r=await request.get('/api/products?'+new URLSearchParams({page:1,category:name}));expect(r.ok(),name).toBeTruthy();const data=await r.json();expect(data.total,name).toBe(counts[name].formats);expect(data.items.length,name).toBeGreaterThan(0);}
- await page.goto('/');await expect(page.locator('.book-category:visible')).toHaveCount(13);await expect(page.locator('.book-page')).toHaveCount(2);
+ await page.goto('/');await expect(page.locator('.menu-category:visible')).toHaveCount(13);await expect(page.locator('.category-book')).toHaveCount(0);
  for(const name of names)await expect(page.getByRole('button',{name:'Découvrir '+name,exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Découvrir Sport',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts.Sport.formats+' références et formats');
  await page.getByRole('button',{name:'Découvrir Minceur',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts.Minceur.formats+' références et formats');
