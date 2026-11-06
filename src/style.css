@@ -389,3 +389,7 @@ dialog.product-dialog{width:min(980px,94vw);padding:0;border:1px solid #c9ad79;b
 /* Product information follows the gallery without a nested scroll area. */
 .sheet-visual{justify-content:flex-start}.sheet-description{padding-top:22px;border-top:1px solid #d9c9a9}.sheet-description h3{font-size:22px;margin-bottom:12px}.sheet-description .description{font-size:13px;line-height:1.85;color:#77725d;white-space:pre-line;margin:0;overflow-wrap:anywhere}.sheet-copy{align-self:start;position:sticky;top:0;background:#fffaf1}.sheet-purchase{margin-top:24px}
 @media(max-width:650px){.sheet-copy{position:static}.sheet-description{padding-top:18px}}
+
+/* Recognizable product thumbnails in the basket. */
+.cart-product-image,.cart-product-placeholder{width:64px;height:76px;flex:0 0 64px;object-fit:contain;background:#f3eee3;border:1px solid #e7dfcf;border-radius:5px;padding:5px}.cart-product-placeholder{display:grid;place-items:center;color:var(--gold);font-size:25px}.cart-line>div{min-width:0;overflow-wrap:anywhere}
+@media(max-width:480px){.cart-line{gap:10px;flex-wrap:wrap}.cart-product-image,.cart-product-placeholder{width:50px;height:62px;flex-basis:50px}.cart-line>div{flex:1 1 calc(100% - 70px)}.cart-line label{margin-left:60px;width:65px}.cart-line>button{margin-left:auto}}

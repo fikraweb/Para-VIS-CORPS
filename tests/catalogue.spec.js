@@ -86,5 +86,5 @@ test('persistent basket and responsive product sheet',async({page})=>{
  await sheet.locator('.sheet-main-image').evaluate(image=>image.decode().catch(()=>{}));await page.screenshot({path:'/tmp/product-sheet-desktop.png'});
  await sheet.getByRole('button',{name:'Ajouter au panier',exact:true}).click();await expect(page.locator('#floating-cart-count')).toHaveText('1');
  await page.setViewportSize({width:390,height:844});expect(await sheet.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBeTruthy();await page.screenshot({path:'/tmp/product-sheet-mobile.png'});
- await sheet.getByRole('button',{name:'Voir mon panier',exact:false}).click();await expect(page.getByRole('heading',{name:'Mon panier'})).toBeVisible();await expect(page.locator('#cart-dialog')).not.toHaveClass('product-dialog');
+ await sheet.getByRole('button',{name:'Voir mon panier',exact:false}).click();await expect(page.getByRole('heading',{name:'Mon panier'})).toBeVisible();await expect(page.locator('#cart-dialog')).not.toHaveClass('product-dialog');await expect(page.locator('.cart-product-image')).toBeVisible();await expect(page.locator('.cart-product-image')).toHaveAttribute('src',/^https:/);expect(await page.locator('#cart-dialog').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBeTruthy();
 });
