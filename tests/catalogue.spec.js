@@ -78,3 +78,13 @@ test('menu and cart dismiss on outside clicks without dismissing inside clicks',
  await page.mouse.click(2,2);await expect(dialog).not.toBeVisible();
  await page.locator('#open-cart').click();await expect(dialog).toBeVisible();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
 });
+
+test('persistent basket and responsive product sheet',async({page})=>{
+ await page.goto('/');await page.locator('.store-faq').scrollIntoViewIfNeeded();
+ const basket=page.getByRole('button',{name:'Ouvrir le panier',exact:true});await expect(basket).toBeInViewport();await basket.click();await expect(page.getByRole('heading',{name:'Mon panier'})).toBeVisible();await page.getByRole('button',{name:'Fermer',exact:true}).click();
+ await page.locator('.campaign-glow [data-featured="glow"]').click();const sheet=page.locator('dialog.product-dialog');await expect(sheet).toBeVisible();await expect(sheet.locator('.sheet-main-image')).toBeVisible();await expect(sheet.locator('.sheet-price')).toContainText('DH');
+ await sheet.locator('.sheet-main-image').evaluate(image=>image.decode().catch(()=>{}));await page.screenshot({path:'/tmp/product-sheet-desktop.png'});
+ await sheet.getByRole('button',{name:'Ajouter au panier',exact:true}).click();await expect(page.locator('#floating-cart-count')).toHaveText('1');
+ await page.setViewportSize({width:390,height:844});expect(await sheet.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBeTruthy();await page.screenshot({path:'/tmp/product-sheet-mobile.png'});
+ await sheet.getByRole('button',{name:'Voir mon panier',exact:false}).click();await expect(page.getByRole('heading',{name:'Mon panier'})).toBeVisible();await expect(page.locator('#cart-dialog')).not.toHaveClass('product-dialog');
+});
