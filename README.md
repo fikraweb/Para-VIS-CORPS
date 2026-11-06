@@ -45,7 +45,7 @@ Les secrets sont fournis directement à Workers (pas à un proxy de secrets HTTP
 
 **Aucun prix BeautyMarket n'a été inventé.** L'accès réseau à `beautymarket.ma` était refusé lors de la réalisation. Trois fiches de travail non publiées et sans prix sont disponibles ; ajouter les véritables références, photos autorisées et prix vérifiés depuis le dashboard. Il n'y a ni import complet ni synchronisation automatique de ce site.
 
-Le logo fourni dans la conversation n'était pas accessible comme fichier dans le workspace. La version actuelle utilise une identité typographique provisoire inspirée de ses couleurs. Ajouter le fichier original dans `public/` et remplacer le bloc `brand` dans `src/app.js` pour l'intégrer fidèlement.
+Le logo officiel fourni est intégré sans retouche dans `public/logo-para-vis-corps.jpeg`, utilisé dans l’en-tête, le visuel principal, le pied de page et l’icône du navigateur.
 
 Avant ouverture commerciale, compléter le téléphone et l'identité de l'exploitant, les frais/délais de livraison, les conditions de vente, la politique de retour et les modalités de conservation/contact de la page confidentialité. Actuellement, la boutique indique clairement que les frais de livraison seront précisés lors de l'appel de confirmation, avant expédition. Renforcer l'antispam avec Cloudflare WAF/Turnstile selon le trafic. Les connexions administrateur sont limitées à 10 tentatives par IP sur 15 minutes ; les cookies sont HttpOnly, Secure et SameSite=Strict. Conserver des sauvegardes D1 et réserver l'accès au compte Cloudflare aux personnes autorisées.
 
