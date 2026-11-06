@@ -1,3 +1,4 @@
+import {readSettings,publicSettings,validateSettings} from './store-settings.js';
 import { catalogue } from './catalogue.js';
 const json=(data,status=200,headers={})=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...headers}});
 const enc=new TextEncoder();
@@ -11,6 +12,7 @@ if(!p.startsWith('/api/')){const r=await env.ASSETS.fetch(req);const h=new Heade
 try {
 if(req.method!=='GET'&&req.headers.get('Origin')!==url.origin)return json({error:'Origine non autorisée.'},403);
 if(req.method!=='GET'&&Number(req.headers.get('Content-Length')||0)>50000)return json({error:'Requête trop volumineuse.'},413);
+if(p==='/api/settings'&&req.method==='GET')return json(publicSettings(await readSettings(env.DB)));
 if(p==='/api/products'&&req.method==='GET')return json(await catalogue(env.DB,url));
 if(p==='/api/collections'&&req.method==='GET')return json((await env.DB.prepare('SELECT id,handle,title FROM collections ORDER BY title COLLATE NOCASE').all()).results);
 if(/^\/api\/products\/\d+$/.test(p)&&req.method==='GET'){
@@ -40,7 +42,18 @@ if(p==='/api/orders'&&req.method==='POST'){
 }
 if(p.startsWith('/api/admin/')){
  if(!await auth(req,env))return json({error:'Connexion requise.'},401);
- if(p==='/api/admin/products'&&req.method==='GET')return json(await catalogue(env.DB,url,true));
+ if(p==='/api/admin/settings'&&req.method==='GET')return json(await readSettings(env.DB));
+ if(p==='/api/admin/settings'&&req.method==='PUT'){const settings=validateSettings(await req.json());if(!settings)return json({error:'Vérifiez les coordonnées, les textes et le seuil de stock (1 à 1000).'},400);await env.DB.prepare('INSERT INTO store_settings(id,value) VALUES (1,?) ON CONFLICT(id) DO UPDATE SET value=excluded.value,updated_at=CURRENT_TIMESTAMP').bind(JSON.stringify(settings)).run();return json(settings);}
+ if(p==='/api/admin/summary'&&req.method==='GET'){
+ const settings=await readSettings(env.DB);
+ const [products,orders,statuses,brands]=await Promise.all([
+ env.DB.prepare('SELECT COUNT(*) total,SUM(active=1) published,SUM(stock=0) out_of_stock,SUM(stock>0 AND stock<=?) low_stock,SUM(stock) units,SUM(CASE WHEN active=1 THEN price*stock ELSE 0 END) stock_value FROM products').bind(settings.low_stock_threshold).first(),
+ env.DB.prepare("SELECT COUNT(*) total,SUM(status='nouvelle') pending,SUM(CASE WHEN status='livrée' THEN total ELSE 0 END) revenue,SUM(CASE WHEN status IN ('nouvelle','confirmée','expédiée') THEN total ELSE 0 END) pipeline FROM orders").first(),
+ env.DB.prepare('SELECT status,COUNT(*) count FROM orders GROUP BY status').all(),
+ env.DB.prepare("SELECT brand,COUNT(*) count FROM products WHERE brand<>'' GROUP BY brand ORDER BY count DESC LIMIT 20").all()]);
+ return json({products,orders,statuses:statuses.results,brands:brands.results});
+ }
+ if(p==='/api/admin/products'&&req.method==='GET'){if(url.searchParams.get('stock')==='low')url.searchParams.set('threshold',String((await readSettings(env.DB)).low_stock_threshold));return json(await catalogue(env.DB,url,true));}
  if(/^\/api\/admin\/products\/\d+$/.test(p)&&req.method==='GET'){
  const product=await env.DB.prepare('SELECT * FROM products WHERE id=?').bind(Number(p.split('/').pop())).first();return product?json(product):json({error:'Produit introuvable.'},404);
  }

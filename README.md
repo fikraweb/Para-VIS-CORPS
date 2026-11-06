@@ -72,3 +72,9 @@ npm test
 ```
 
 Les tests Chromium utilisent une **base isolée** sous `/tmp/pvc-e2e-state` et des identifiants de test sans rapport avec la production. Ils vérifient l’import complet, les collections, la pagination, la recherche, l’édition des stocks, le panier après changement de page, une commande via le navigateur, sa présence dans l'administration, les changements de statut, les prix recalculés, le stock, les commandes concurrentes, les rejets non authentifiés, la protection d'origine, les coordonnées invalides et l'affichage mobile sans débordement. Il ne valide pas un déploiement distant. CI GitHub incluse.
+
+## Espace de gestion
+
+`/admin` propose une navigation latérale : vue générale, commandes, produits, stocks, clients, catégories/marques, paramètres et sécurité. Les compteurs et montants de la vue générale portent sur toute la base ; les listes de commandes et de clients portent sur les 500 dernières commandes. Les montants sont les sous-totaux produits, hors frais de livraison. Les exports CSV indiquent leur périmètre : sélection de commandes ou page de produits affichée.
+
+Les paramètres enregistrés dans `store_settings` (migration `0004`) pilotent le bandeau, le texte d’accueil, les coordonnées du pied de page, le message de livraison et le seuil d’alerte de stock. `GET /api/settings` expose uniquement les paramètres publics ; les modifications et les statistiques sont protégées par la session administrateur. Les secrets d’accès, domaines, quotas et déploiements restent gérés dans Cloudflare. Les catégories importées et leurs appartenances sont conservées ; les fiches produits, prix, stocks et publications restent modifiables.

@@ -14,6 +14,7 @@ export async function catalogue(db,url,admin=false){
  if(!ids.length)return [];
  where.push(`p.source_product_id IN (${ids.map(()=>'?').join(',')})`);values.push(...ids);
  }
+ if(admin){if(search.get('publication')==='published')where.push('p.active=1');if(search.get('publication')==='draft')where.push('p.active=0');if(search.get('stock')==='out')where.push('p.stock=0');if(search.get('stock')==='low'){const threshold=Math.min(1000,Math.max(1,Number(search.get('threshold'))||3));where.push('p.stock>0 AND p.stock<=?');values.push(threshold);}}
  const q=(search.get('q')||'').trim().slice(0,150);
  if(q){where.push('(instr(lower(p.name),lower(?))>0 OR instr(lower(p.brand),lower(?))>0 OR instr(lower(COALESCE(p.sku,\'\')),lower(?))>0)');values.push(q,q,q);}
  const category=search.get('category');if(category&&category!=='Tous'){
