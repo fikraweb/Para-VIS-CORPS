@@ -88,3 +88,11 @@ test('persistent basket and responsive product sheet',async({page})=>{
  await page.setViewportSize({width:390,height:844});await sheet.evaluate(el=>el.scrollTop=0);await expect(sheet.locator('.sheet-price')).toBeInViewport();await expect(sheet.locator('#detail-add')).toBeInViewport();expect(await sheet.locator('.sheet-description').evaluate(el=>el.getBoundingClientRect().top>document.querySelector('#detail-add').getBoundingClientRect().bottom)).toBeTruthy();expect(await sheet.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBeTruthy();await page.screenshot({path:'/tmp/product-sheet-mobile.png'});
  await sheet.getByRole('button',{name:'Voir mon panier',exact:false}).click();await expect(page.getByRole('heading',{name:'Mon panier'})).toBeVisible();await expect(page.locator('#cart-dialog')).not.toHaveClass('product-dialog');await expect(page.locator('.cart-product-image')).toBeVisible();await expect(page.locator('.cart-product-image')).toHaveAttribute('src',/^https:/);expect(await page.locator('#cart-dialog').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBeTruthy();
 });
+
+test('atelier hero has responsive 3D categories and respects reduced motion',async({page})=>{
+ await page.goto('/');const hero=page.locator('.atelier-hero');await expect(hero).toBeVisible();await expect(hero.locator('.hero-depth-scene img')).toHaveAttribute('src','/hero-atelier-background.png');await expect(hero.locator('.menu-category')).toHaveCount(13);
+ await page.mouse.move(800,250);await expect(hero).toHaveAttribute('data-depth',/^[nsew]+$|center/);
+ await page.locator('.store-faq').scrollIntoViewIfNeeded();await expect(hero).toHaveClass(/atelier-paused/);
+ await page.emulateMedia({reducedMotion:'reduce'});await hero.scrollIntoViewIfNeeded();expect(await page.locator('.atelier-orbit-ring').evaluate(el=>getComputedStyle(el).animationName)).toBe('none');expect(await hero.locator('.bubble-motion').first().evaluate(el=>getComputedStyle(el).animationName)).toBe('none');
+ for(const width of [390,320]){await page.setViewportSize({width,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();await expect(hero.getByRole('link',{name:'Explorer toute la boutique'})).toBeVisible();}
+});
