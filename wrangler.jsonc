@@ -4,5 +4,5 @@
   "main": "src/worker.js",
   "compatibility_date": "2026-11-01",
   "assets": { "directory": "./dist", "binding": "ASSETS", "not_found_handling": "single-page-application", "run_worker_first": ["/api/*"] },
-  "d1_databases": [{ "binding": "DB", "database_name": "para-vis-corps", "database_id": "REPLACE_WITH_D1_DATABASE_ID", "migrations_dir": "migrations" }]
+  "d1_databases": [{ "binding": "DB", "database_name": "para-vis-corps", "database_id": "49747c8f-d4e5-4a23-85f1-bc7f06881b6b", "migrations_dir": "migrations" }]
 }

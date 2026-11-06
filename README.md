@@ -24,11 +24,11 @@ Ce projet utilise **Workers**, et non un simple hébergement statique Pages : le
 
 1. Connecter le compte Cloudflare avec son mécanisme habituel, ou utiliser un token Cloudflare sécurisé dans les paramètres du service. Ne jamais mettre les secrets dans GitHub ou dans le code.
 2. Créer D1 : `npx wrangler d1 create para-vis-corps`.
-3. Remplacer `REPLACE_WITH_D1_DATABASE_ID` dans `wrangler.jsonc` par le `database_id` retourné ; conserver le binding `DB`.
+3. Le `database_id` de la base créée est configuré dans `wrangler.jsonc` ; conserver le binding `DB`. Pour un autre compte Cloudflare, le remplacer par celui de sa propre base.
 4. Appliquer le schéma : `npx wrangler d1 migrations apply para-vis-corps --remote`.
 5. Configurer `npx wrangler secret put ADMIN_PASSWORD` (minimum 16 caractères) et `npx wrangler secret put SESSION_SECRET` (aléatoire, minimum 32 caractères).
 6. Déployer : `npm run deploy`. Dans Cloudflare, associer ensuite le domaine personnalisé au Worker et activer HTTPS.
-7. Facultatif : connecter ce dépôt dans Workers Builds, avec `npm ci && npm run build` comme commande de construction et `npx wrangler deploy` comme commande de déploiement. Configurer D1 et les secrets avant l'ouverture.
+7. Facultatif : connecter ce dépôt dans Workers Builds, avec `npm run build` comme commande de construction et `npm run deploy` comme commande de déploiement (installation npm automatique par Workers Builds). Le script de déploiement applique les migrations D1 avant de publier le Worker. Le token de build doit pouvoir modifier la base D1 et déployer le Worker. Configurer D1 et les secrets avant l'ouverture.
 
 Les secrets sont fournis directement à Workers (pas à un proxy de secrets HTTP). Aucune donnée Cloudflare ni aucun identifiant de déploiement n'est inclus dans ce dépôt. Une page GitHub Pages seule ne fera pas fonctionner les commandes.
 
