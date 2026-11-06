@@ -1,0 +1,65 @@
+[
+  {
+    "category": "Visage",
+    "source_product_id": "6728782446767",
+    "source_url": "https://beautymarket.ma/products/cerave-sa-gel-nettoyant-anti-rugosites-236-ml",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/Untitled-1_1x_1_b63b40b3-53eb-4e25-93d8-e27615300ce7.jpg?v=1714651081",
+    "local_path": "/category-products/visage.jpg"
+  },
+  {
+    "category": "Corps",
+    "source_product_id": "6729087844527",
+    "source_url": "https://beautymarket.ma/products/uriage-xemose-huile-lavante-apaisante-200-ml",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/200ml.png?v=1690811596",
+    "local_path": "/category-products/corps.png"
+  },
+  {
+    "category": "Cheveux",
+    "source_product_id": "6729103081647",
+    "source_url": "https://beautymarket.ma/products/vichy-dercos-densi-solutions-shampooing-epaisseur-resistance-250-ml",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/DRSTWRTRE.jpg?v=1734970837",
+    "local_path": "/category-products/cheveux.jpg"
+  },
+  {
+    "category": "Solaires",
+    "source_product_id": "6728927740079",
+    "source_url": "https://beautymarket.ma/products/la-roche-posay-anthelios-mineral-one-spf-50-01-claire-30ml",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/Untitled-1_1360c145-1e86-47ac-b4ea-95293b221b3e.jpg?v=1714664735",
+    "local_path": "/category-products/solaires.jpg"
+  },
+  {
+    "category": "Bébé & Maman",
+    "source_product_id": "6728969552047",
+    "source_url": "https://beautymarket.ma/products/mustela-lait-hydratant-corps-bebe-300ml",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/mu300mll.png?v=1690883740",
+    "local_path": "/category-products/bebe-maman.png"
+  },
+  {
+    "category": "Bien-être",
+    "source_product_id": "7349892317359",
+    "source_url": "https://beautymarket.ma/products/zinc-histidine-vitamine-c-30-comprimes-doppelherz-aktiv",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/products/2_93c5c051-31c3-40d4-b418-b02b787e50b0.webp?v=1661451835",
+    "local_path": "/category-products/bien-etre.webp"
+  },
+  {
+    "category": "Maquillage",
+    "source_product_id": "7708290646191",
+    "source_url": "https://beautymarket.ma/products/maybelline-falsies-surreal-lash-extension-mascara",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/files/FALLLL.png?v=1744579484",
+    "local_path": "/category-products/maquillage.png"
+  },
+  {
+    "category": "Hygiène",
+    "source_product_id": "6728858763439",
+    "source_url": "https://beautymarket.ma/products/elmex-dentifrice-sensitive-blancheur",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/products/New-Project-7-2_70fafc6a-0f04-499d-9895-c33c01ac3e5e.jpg?v=1630344476",
+    "local_path": "/category-products/hygiene.jpg"
+  },
+  {
+    "category": "Autres soins",
+    "source_product_id": "6729005007023",
+    "source_url": "https://beautymarket.ma/products/omron-tensiometre-brassard-m3-confort",
+    "image_url": "https://cdn.shopify.com/s/files/1/0572/7938/1679/products/omron-tensiometre-brassard-m3-confort_55b26f71-6a99-4d13-8c40-b9b1923c2fb4.jpg?v=1630347844",
+    "local_path": "/category-products/autres-soins.jpg"
+  }
+]
