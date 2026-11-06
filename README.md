@@ -13,6 +13,7 @@ cp .dev.vars.example .dev.vars
 # et SESSION_SECRET aléatoire de 32 caractères minimum.
 npm run build
 npm run db:local
+npm run catalogue:local
 npm run dev
 ```
 
@@ -41,13 +42,25 @@ Les secrets sont fournis directement à Workers (pas à un proxy de secrets HTTP
 - Le chiffre affiché est le sous-total des articles livrés, hors frais de livraison.
 - Le serveur recalcule les prix depuis D1, ignore les montants envoyés par le client et réserve les stocks de manière atomique. Aucun paiement par carte n'est collecté.
 
-## Catalogue et éléments restant à fournir
+## Catalogue intégré
 
-**Aucun prix BeautyMarket n'a été inventé.** L'accès réseau à `beautymarket.ma` était refusé lors de la réalisation. Trois fiches de travail non publiées et sans prix sont disponibles ; ajouter les véritables références, photos autorisées et prix vérifiés depuis le dashboard. Il n'y a ni import complet ni synchronisation automatique de ce site.
+Le catalogue public BeautyMarket a été extrait et vérifié le 6 novembre 2026 : **13 036 produits, 13 238 références/formats et 691 collections**, avec 52 939 relations produit–collection. Les 97 produits comportant plusieurs variantes sont proposés sous des lignes distinctes, chacune avec son propre prix et son stock. Les noms de formats sont ajoutés aux titres. Le manifeste est dans `catalogue-manifest.json`.
 
-Le logo original est conservé dans `public/logo-para-vis-corps.jpeg`. La version à fond transparent `public/logo-para-vis-corps-transparent.png` est utilisée dans l’en-tête, le pied de page et l’icône du navigateur. Sur l’accueil, le logo agrandi est aligné à gauche.
+**À la demande du propriétaire, chaque référence importée démarre à 10 unités**, indépendamment de la disponibilité annoncée par BeautyMarket. Modifier les quantités dans `/admin` selon le stock réel de la boutique. Le stock est décrémenté par les commandes et n’est pas réinitialisé lors des déploiements suivants.
 
-Avant ouverture commerciale, compléter le téléphone et l'identité de l'exploitant, les frais/délais de livraison, les conditions de vente, la politique de retour et les modalités de conservation/contact de la page confidentialité. Actuellement, la boutique indique clairement que les frais de livraison seront précisés lors de l'appel de confirmation, avant expédition. Renforcer l'antispam avec Cloudflare WAF/Turnstile selon le trafic. Les connexions administrateur sont limitées à 10 tentatives par IP sur 15 minutes ; les cookies sont HttpOnly, Secure et SameSite=Strict. Conserver des sauvegardes D1 et réserver l'accès au compte Cloudflare aux personnes autorisées.
+Les prix en MAD sont conservés au centime : il s’agit d’un instantané, sans synchronisation automatique. Toutes les collections source sont accessibles dans le sélecteur « Catégories, marques & collections » ; les onglets supérieurs sont des regroupements généraux destinés à la navigation. Les résultats de recherche et l’administration sont paginés à 24 références. Le panier récupère ses références par identifiant pour rester correct lorsqu’on change de page ou de filtre.
+
+Les photos sont chargées depuis leurs URL HTTPS `cdn.shopify.com`. Une fiche source n’avait pas de photo : un visuel de remplacement est affiché. Les galeries conservent les autres photos source. Les paragraphes promotionnels nommant le vendeur source sont exclus de la description destinée à la boutique. Le logo original et sa version transparente sont conservés dans `public/`.
+
+### Import D1 et déploiement
+
+Les migrations ne modifient que le schéma. `scripts/import-catalogue.mjs` charge les fichiers de `catalogue-import/` via **l’import SQL par fichier de D1**, adapté au volume, puis contrôle les quatre comptages du manifeste. La première importation peut prendre quelques minutes. Une empreinte mémorisée dans `catalogue_imports` évite de rejouer l’import. Les insertions sont également protégées contre les doublons par les identifiants de variantes source et n’écrasent pas les fiches existantes.
+
+`npm run deploy` exécute la construction, les migrations distantes, l’import vérifié, puis le déploiement du Worker. Conserver cette commande dans Cloudflare Builds. Le token doit disposer de l’accès D1 et Workers. L’import s’arrête en cas d’erreur et empêche la publication d’un Worker nécessitant un catalogue incomplet. Les fichiers SQL ne sont pas exposés dans les assets publics.
+
+Pour reconstruire les fichiers à partir du snapshot original : `python scripts/prepare-catalogue.py /chemin/du/snapshot`. Ce script prépare les données ; il ne remplace pas un processus de synchronisation des prix ou des stocks.
+
+Avant ouverture commerciale, compléter les coordonnées de l’exploitant, les frais/délais de livraison, les conditions de vente et de retour, et la politique de conservation des données. Les frais sont actuellement précisés lors de l’appel de confirmation, avant expédition.
 
 ## Validation
 
@@ -58,4 +71,4 @@ npx playwright install --with-deps chromium
 npm test
 ```
 
-Le test Chromium utilise une **base isolée** sous `/tmp/pvc-e2e-state` et des identifiants de test sans rapport avec la production. Il vérifie le catalogue, une commande via le navigateur, sa présence dans l'administration, les changements de statut, les prix recalculés, le stock, les commandes concurrentes, les rejets non authentifiés, la protection d'origine, les coordonnées invalides et l'affichage mobile sans débordement. Il ne valide pas un déploiement distant. CI GitHub incluse.
+Les tests Chromium utilisent une **base isolée** sous `/tmp/pvc-e2e-state` et des identifiants de test sans rapport avec la production. Ils vérifient l’import complet, les collections, la pagination, la recherche, l’édition des stocks, le panier après changement de page, une commande via le navigateur, sa présence dans l'administration, les changements de statut, les prix recalculés, le stock, les commandes concurrentes, les rejets non authentifiés, la protection d'origine, les coordonnées invalides et l'affichage mobile sans débordement. Il ne valide pas un déploiement distant. CI GitHub incluse.

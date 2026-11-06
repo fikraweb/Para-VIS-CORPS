@@ -1,1 +1,19 @@
-{"name":"para-vis-corps","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"wrangler dev","build":"vite build","db:local":"wrangler d1 migrations apply para-vis-corps --local","test":"playwright test","deploy":"npm run build && wrangler d1 migrations apply para-vis-corps --remote && wrangler deploy"},"devDependencies":{"@playwright/test":"^1.56.1","vite":"^7.2.0","wrangler":"^4.45.0"}}
+{
+  "name": "para-vis-corps",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "vite build",
+    "db:local": "wrangler d1 migrations apply para-vis-corps --local",
+    "test": "playwright test",
+    "deploy": "npm run build && wrangler d1 migrations apply para-vis-corps --remote && node scripts/import-catalogue.mjs --remote && wrangler deploy",
+    "catalogue:local": "node scripts/import-catalogue.mjs --local"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "vite": "^7.2.0",
+    "wrangler": "^4.45.0"
+  }
+}

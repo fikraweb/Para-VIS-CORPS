@@ -1,3 +1,4 @@
+import { catalogue } from './catalogue.js';
 const json=(data,status=200,headers={})=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...headers}});
 const enc=new TextEncoder();
 const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
@@ -10,7 +11,12 @@ if(!p.startsWith('/api/')){const r=await env.ASSETS.fetch(req);const h=new Heade
 try {
 if(req.method!=='GET'&&req.headers.get('Origin')!==url.origin)return json({error:'Origine non autorisée.'},403);
 if(req.method!=='GET'&&Number(req.headers.get('Content-Length')||0)>50000)return json({error:'Requête trop volumineuse.'},413);
-if(p==='/api/products'&&req.method==='GET')return json((await env.DB.prepare('SELECT * FROM products WHERE active=1 AND price IS NOT NULL ORDER BY id DESC').all()).results);
+if(p==='/api/products'&&req.method==='GET')return json(await catalogue(env.DB,url));
+if(p==='/api/collections'&&req.method==='GET')return json((await env.DB.prepare('SELECT id,handle,title FROM collections ORDER BY title COLLATE NOCASE').all()).results);
+if(/^\/api\/products\/\d+$/.test(p)&&req.method==='GET'){
+ const product=await env.DB.prepare('SELECT * FROM products WHERE id=? AND active=1 AND price IS NOT NULL').bind(Number(p.split('/').pop())).first();
+ return product?json(product):json({error:'Produit introuvable.'},404);
+}
 if(p==='/api/login'&&req.method==='POST'){
  if(!env.ADMIN_PASSWORD||env.ADMIN_PASSWORD.length<16||!env.SESSION_SECRET)return json({error:'Administration non configurée.'},503);
  const ip=req.headers.get('CF-Connecting-IP')||'local', now=Date.now();
@@ -18,6 +24,7 @@ if(p==='/api/login'&&req.method==='POST'){
  if(attempt&&now-attempt.started<900000&&attempt.attempts>=10)return json({error:'Trop de tentatives. Réessayez dans 15 minutes.'},429);
  await env.DB.prepare('INSERT INTO login_attempts(ip,attempts,started) VALUES (?,1,?) ON CONFLICT(ip) DO UPDATE SET attempts=CASE WHEN started<? THEN 1 ELSE attempts+1 END, started=CASE WHEN started<? THEN excluded.started ELSE started END').bind(ip,now,now-900000,now-900000).run();
  const b=await req.json();if(!await equal(String(b.password||''),env.ADMIN_PASSWORD))return json({error:'Mot de passe incorrect.'},401);
+ await env.DB.prepare('DELETE FROM login_attempts WHERE ip=?').bind(ip).run();
  const exp=String(now+28800000);return json({ok:true},200,{'Set-Cookie':`session=${exp}.${await sign(exp,env.SESSION_SECRET)}; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=28800`});
 }
 if(p==='/api/logout'&&req.method==='POST')return json({ok:true},200,{'Set-Cookie':'session=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0'});
@@ -33,9 +40,12 @@ if(p==='/api/orders'&&req.method==='POST'){
 }
 if(p.startsWith('/api/admin/')){
  if(!await auth(req,env))return json({error:'Connexion requise.'},401);
- if(p==='/api/admin/products'&&req.method==='GET')return json((await env.DB.prepare('SELECT * FROM products ORDER BY id DESC').all()).results);
+ if(p==='/api/admin/products'&&req.method==='GET')return json(await catalogue(env.DB,url,true));
+ if(/^\/api\/admin\/products\/\d+$/.test(p)&&req.method==='GET'){
+ const product=await env.DB.prepare('SELECT * FROM products WHERE id=?').bind(Number(p.split('/').pop())).first();return product?json(product):json({error:'Produit introuvable.'},404);
+ }
  if(p==='/api/admin/products'&&req.method==='POST'){
- const b=await req.json();if(!text(b.name,200)||!text(b.category,80)||typeof b.brand!=='string'||b.brand.length>100||typeof b.description!=='string'||b.description.length>3000||!Number.isInteger(b.price)||b.price<1||b.price>10000000||!Number.isInteger(b.stock)||b.stock<0||b.stock>100000||typeof b.image!=='string'||b.image.length>2000||(b.image&&!/^https:\/\//.test(b.image))||![0,1].includes(b.active))return json({error:'Données produit invalides. Prix positif et image HTTPS requis.'},400);
+ const b=await req.json();if(!text(b.name,250)||!text(b.category,80)||typeof b.brand!=='string'||b.brand.length>100||typeof b.description!=='string'||b.description.length>12000||!Number.isInteger(b.price)||b.price<1||b.price>10000000||!Number.isInteger(b.stock)||b.stock<0||b.stock>100000||typeof b.image!=='string'||b.image.length>2000||(b.image&&!/^https:\/\//.test(b.image))||![0,1].includes(b.active))return json({error:'Données produit invalides. Prix positif et image HTTPS requis.'},400);
  const values=[b.name.trim(),b.brand.trim(),b.category,b.description,b.price,b.image,b.stock,b.active];
  if(b.id){await env.DB.prepare('UPDATE products SET name=?,brand=?,category=?,description=?,price=?,image=?,stock=?,active=? WHERE id=?').bind(...values,b.id).run();}else await env.DB.prepare('INSERT INTO products(name,brand,category,description,price,image,stock,active) VALUES (?,?,?,?,?,?,?,?)').bind(...values).run();return json({ok:true});}
  if(p==='/api/admin/orders'&&req.method==='GET'){const orders=(await env.DB.prepare('SELECT * FROM orders ORDER BY id DESC LIMIT 500').all()).results;const items=(await env.DB.prepare('SELECT * FROM order_items WHERE order_id IN (SELECT id FROM orders ORDER BY id DESC LIMIT 500)').all()).results;return json(orders.map(o=>({...o,items:items.filter(i=>i.order_id===o.id)})));}

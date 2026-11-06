@@ -24,6 +24,6 @@ test('secure catalogue, checkout, dashboard and inventory workflow',async({page,
  const order={name:'Test concurrence',phone:'0612345678',city:'Rabat',address:'Adresse test',total:1,items:[{id:p.id,quantity:2,price:1}]};
  const results=await Promise.all([request.post('/api/orders',{headers:origin,data:order}),request.post('/api/orders',{headers:origin,data:order})]);expect(results.filter(r=>r.status()===201)).toHaveLength(1);const successful=await results.find(r=>r.status()===201).json();expect(successful.total).toBe(24690);
  expect((await (await request.get('/api/products')).json()).find(x=>x.id===p.id).stock).toBe(0);
- r=await request.post('/api/admin/products',{headers:origin,data:{...p,active:0}});expect(r.ok()).toBeTruthy();
+ r=await request.post('/api/admin/products',{headers:origin,data:{...await (await request.get('/api/products/'+p.id)).json(),active:0}});expect(r.ok()).toBeTruthy();
  await request.post('/api/logout',{headers:origin});expect((await request.get('/api/admin/orders')).status()).toBe(401);
 });

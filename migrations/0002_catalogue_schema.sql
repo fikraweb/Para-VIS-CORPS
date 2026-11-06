@@ -1,0 +1,13 @@
+ALTER TABLE products ADD COLUMN source_product_id TEXT;
+ALTER TABLE products ADD COLUMN source_variant_id TEXT;
+ALTER TABLE products ADD COLUMN source_url TEXT;
+ALTER TABLE products ADD COLUMN source_available INTEGER;
+ALTER TABLE products ADD COLUMN images_json TEXT NOT NULL DEFAULT '[]';
+ALTER TABLE products ADD COLUMN sku TEXT;
+CREATE UNIQUE INDEX products_source_variant ON products(source_variant_id);
+CREATE INDEX products_source_parent ON products(source_product_id);
+CREATE INDEX products_visible ON products(active,id);
+CREATE INDEX products_category ON products(category,active);
+CREATE TABLE collections (id TEXT PRIMARY KEY, handle TEXT NOT NULL UNIQUE, title TEXT NOT NULL, image TEXT NOT NULL DEFAULT '');
+CREATE TABLE product_collections (source_product_id TEXT NOT NULL, collection_id TEXT NOT NULL REFERENCES collections(id), PRIMARY KEY(source_product_id,collection_id));
+CREATE INDEX collection_products ON product_collections(collection_id,source_product_id);

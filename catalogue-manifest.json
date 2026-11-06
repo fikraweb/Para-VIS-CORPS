@@ -1,0 +1,14 @@
+{
+  "source": "https://beautymarket.ma",
+  "snapshot_at_utc": "2026-11-06T13:22:12.073271+00:00",
+  "source_products": 13036,
+  "sellable_formats": 13238,
+  "collections": 691,
+  "relationships": 52939,
+  "initial_stock": 10,
+  "automatic_price_sync": false,
+  "images": "External HTTPS source URLs",
+  "missing_images": [
+    "10365543022767"
+  ]
+}
