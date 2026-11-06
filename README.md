@@ -75,6 +75,10 @@ Les tests Chromium utilisent une **base isolée** sous `/tmp/pvc-e2e-state` et d
 
 ## Espace de gestion
 
-`/admin` propose une navigation latérale : vue générale, commandes, produits, stocks, clients, catégories/marques, paramètres et sécurité. Les compteurs et montants de la vue générale portent sur toute la base ; les listes de commandes et de clients portent sur les 500 dernières commandes. Les montants sont les sous-totaux produits, hors frais de livraison. Les exports CSV indiquent leur périmètre : sélection de commandes ou page de produits affichée.
+`/admin` propose une navigation latérale : vue générale, commandes, produits, stocks, clients, catégories/marques, paramètres. Les compteurs et montants de la vue générale portent sur toute la base ; les listes de commandes et de clients portent sur les 500 dernières commandes. Les montants sont les sous-totaux produits, hors frais de livraison. Les exports CSV indiquent leur périmètre : sélection de commandes ou page de produits affichée.
 
 Les paramètres enregistrés dans `store_settings` (migration `0004`) pilotent le bandeau, le texte d’accueil, les coordonnées du pied de page, le message de livraison et le seuil d’alerte de stock. `GET /api/settings` expose uniquement les paramètres publics ; les modifications et les statistiques sont protégées par la session administrateur. Les secrets d’accès, domaines, quotas et déploiements restent gérés dans Cloudflare. Les catégories importées et leurs appartenances sont conservées ; les fiches produits, prix, stocks et publications restent modifiables.
+
+### Photos des produits
+
+Dans une fiche produit, « Choisir une photo » ouvre les fichiers de l’appareil, sans saisie d’URL. JPG, PNG et WebP sont acceptés jusqu’à 15 Mo, puis redimensionnés et optimisés dans le navigateur (maximum 350 Ko enregistrés). Pour un produit existant, on peut remplacer la photo principale ou ajouter une vue à la galerie. La migration `0005` conserve les images dans la base D1 existante ; les photos et la fiche sont enregistrées dans un même lot atomique. `/api/images/:id` sert les images publiquement pour les fiches et paniers, avec cache immuable. Les opérations d’écriture restent réservées à la session administrateur. Aucun bucket supplémentaire ni nouvelle clé API ne sont requis.

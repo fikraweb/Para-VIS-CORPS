@@ -1,3 +1,4 @@
+import {validImageReference,decodeImageUpload,readProductBody} from './product-images.js';
 import {readSettings,publicSettings,validateSettings} from './store-settings.js';
 import { catalogue } from './catalogue.js';
 const json=(data,status=200,headers={})=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...headers}});
@@ -10,8 +11,9 @@ const text=(v,max)=>typeof v==='string'&&v.trim().length>0&&v.trim().length<=max
 export default {async fetch(req,env){const url=new URL(req.url),p=url.pathname;
 if(!p.startsWith('/api/')){const r=await env.ASSETS.fetch(req);const h=new Headers(r.headers);if((h.get('Content-Type')||'').includes('text/html'))h.set('Cache-Control','no-cache');h.set('X-Content-Type-Options','nosniff');h.set('Referrer-Policy','strict-origin-when-cross-origin');h.set('Content-Security-Policy',"default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");return new Response(r.body,{status:r.status,headers:h});}
 try {
-if(req.method!=='GET'&&req.headers.get('Origin')!==url.origin)return json({error:'Origine non autorisée.'},403);
-if(req.method!=='GET'&&Number(req.headers.get('Content-Length')||0)>50000)return json({error:'Requête trop volumineuse.'},413);
+if(!['GET','HEAD'].includes(req.method)&&req.headers.get('Origin')!==url.origin)return json({error:'Origine non autorisée.'},403);
+if(req.method!=='GET'&&Number(req.headers.get('Content-Length')||0)>(p==='/api/admin/products'?650000:50000))return json({error:'Requête trop volumineuse.'},413);
+if(/^\/api\/images\/[a-f0-9-]{36}$/.test(p)&&['GET','HEAD'].includes(req.method)){const image=await env.DB.prepare('SELECT data,mime FROM product_images WHERE id=?').bind(p.split('/').pop()).first();if(!image)return json({error:'Image introuvable.'},404);return new Response(req.method==='HEAD'?null:new Uint8Array(image.data),{headers:{'Content-Type':image.mime,'Cache-Control':'public, max-age=31536000, immutable','X-Content-Type-Options':'nosniff'}});}
 if(p==='/api/settings'&&req.method==='GET')return json(publicSettings(await readSettings(env.DB)));
 if(p==='/api/products'&&req.method==='GET')return json(await catalogue(env.DB,url));
 if(p==='/api/collections'&&req.method==='GET')return json((await env.DB.prepare('SELECT id,handle,title FROM collections ORDER BY title COLLATE NOCASE').all()).results);
@@ -58,9 +60,18 @@ if(p.startsWith('/api/admin/')){
  const product=await env.DB.prepare('SELECT * FROM products WHERE id=?').bind(Number(p.split('/').pop())).first();return product?json(product):json({error:'Produit introuvable.'},404);
  }
  if(p==='/api/admin/products'&&req.method==='POST'){
- const b=await req.json();if(!text(b.name,250)||!text(b.category,80)||typeof b.brand!=='string'||b.brand.length>100||typeof b.description!=='string'||b.description.length>12000||!Number.isInteger(b.price)||b.price<1||b.price>10000000||!Number.isInteger(b.stock)||b.stock<0||b.stock>100000||typeof b.image!=='string'||b.image.length>2000||(b.image&&!/^https:\/\//.test(b.image))||![0,1].includes(b.active))return json({error:'Données produit invalides. Prix positif et image HTTPS requis.'},400);
- const values=[b.name.trim(),b.brand.trim(),b.category,b.description,b.price,b.image,b.stock,b.active];
- if(b.id){await env.DB.prepare('UPDATE products SET name=?,brand=?,category=?,description=?,price=?,image=?,stock=?,active=? WHERE id=?').bind(...values,b.id).run();}else await env.DB.prepare('INSERT INTO products(name,brand,category,description,price,image,stock,active) VALUES (?,?,?,?,?,?,?,?)').bind(...values).run();return json({ok:true});}
+ let b;try{b=await readProductBody(req);}catch(error){return json({error:error.message==='Image trop volumineuse.'?error.message:'Données produit invalides.'},400);}
+ if(!b||!text(b.name,250)||!text(b.category,80)||typeof b.brand!=='string'||b.brand.length>100||typeof b.description!=='string'||b.description.length>12000||!Number.isInteger(b.price)||b.price<1||b.price>10000000||!Number.isInteger(b.stock)||b.stock<0||b.stock>100000||typeof b.image!=='string'||b.image.length>2000||!validImageReference(b.image)||![0,1].includes(b.active)||(b.id!==undefined&&(!Number.isSafeInteger(b.id)||b.id<1)))return json({error:'Données produit invalides. Vérifiez les champs et la photo.'},400);
+ const existing=b.id?await env.DB.prepare('SELECT image,images_json FROM products WHERE id=?').bind(b.id).first():null;if(b.id&&!existing)return json({error:'Produit introuvable.'},404);
+ const upload=b.image_upload===undefined?null:decodeImageUpload(b.image_upload);if(b.image_upload!==undefined&&!upload)return json({error:'Photo invalide. Choisissez une image JPG, PNG ou WebP.'},400);
+ if(b.image_mode!==undefined&&!['replace','append'].includes(b.image_mode))return json({error:'Choisissez le mode d’ajout de la photo.'},400);
+ let gallery=[];try{gallery=JSON.parse(existing?.images_json||'[]').filter(image=>image&&validImageReference(image));}catch{}if(existing?.image&&!gallery.includes(existing.image))gallery.unshift(existing.image);
+ let image=b.image;const statements=[];
+ if(upload){const id=crypto.randomUUID(),path='/api/images/'+id;statements.push(env.DB.prepare('INSERT INTO product_images(id,data,mime) VALUES (?,?,?)').bind(id,Array.from(upload.bytes),upload.mime));if(b.image_mode==='append'&&existing?.image){image=existing.image;gallery.push(path);}else{image=path;gallery=[path,...gallery.filter(item=>item!==existing?.image)];}}
+ else if(image!==existing?.image){gallery=image?[image,...gallery.filter(item=>item!==existing?.image&&item!==image)]:[];}
+ const values=[b.name.trim(),b.brand.trim(),b.category,b.description,b.price,image,b.stock,b.active,JSON.stringify(gallery)];
+ if(b.id)statements.push(env.DB.prepare('UPDATE products SET name=?,brand=?,category=?,description=?,price=?,image=?,stock=?,active=?,images_json=? WHERE id=?').bind(...values,b.id));else statements.push(env.DB.prepare('INSERT INTO products(name,brand,category,description,price,image,stock,active,images_json) VALUES (?,?,?,?,?,?,?,?,?)').bind(...values));
+ await env.DB.batch(statements);return json({ok:true});}
  if(p==='/api/admin/orders'&&req.method==='GET'){const orders=(await env.DB.prepare('SELECT * FROM orders ORDER BY id DESC LIMIT 500').all()).results;const items=(await env.DB.prepare('SELECT * FROM order_items WHERE order_id IN (SELECT id FROM orders ORDER BY id DESC LIMIT 500)').all()).results;return json(orders.map(o=>({...o,items:items.filter(i=>i.order_id===o.id)})));}
  if(p==='/api/admin/orders'&&req.method==='PATCH'){const b=await req.json();if(!['nouvelle','confirmée','expédiée','livrée','annulée'].includes(b.status)||!Number.isInteger(b.id))return json({error:'Statut invalide.'},400);await env.DB.prepare('UPDATE orders SET status=? WHERE id=?').bind(b.status,b.id).run();return json({ok:true});}
 }
