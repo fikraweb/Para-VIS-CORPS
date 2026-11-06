@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="780" viewBox="0 0 720 780" fill="none">
+<defs>
+ <linearGradient id="arch" x1="150" y1="90" x2="600" y2="750" gradientUnits="userSpaceOnUse"><stop stop-color="#f5ebd5"/><stop offset="1" stop-color="#c8c7aa"/></linearGradient>
+ <linearGradient id="cream"><stop stop-color="#cfc4aa"/><stop offset=".24" stop-color="#fff7e6"/><stop offset=".72" stop-color="#f4ecd8"/><stop offset="1" stop-color="#bdb49b"/></linearGradient>
+ <linearGradient id="green"><stop stop-color="#293c30"/><stop offset=".32" stop-color="#65725a"/><stop offset=".65" stop-color="#43593e"/><stop offset="1" stop-color="#263a2b"/></linearGradient>
+ <linearGradient id="gold"><stop stop-color="#887043"/><stop offset=".3" stop-color="#dfcb93"/><stop offset=".65" stop-color="#bca36b"/><stop offset="1" stop-color="#80653b"/></linearGradient>
+ <linearGradient id="stone" x1="100" y1="560" x2="600" y2="750" gradientUnits="userSpaceOnUse"><stop stop-color="#eee6d0"/><stop offset="1" stop-color="#9f9f81"/></linearGradient>
+ <filter id="shadow" x="-50%" y="-50%" width="220%" height="220%"><feGaussianBlur stdDeviation="15"/></filter>
+ <filter id="soft" x="-40%" y="-30%" width="190%" height="180%"><feDropShadow dx="13" dy="16" stdDeviation="12" flood-color="#263021" flood-opacity=".22"/></filter>
+</defs>
+<path d="M132 624V284a228 228 0 0 1 456 0v340z" fill="url(#arch)"/>
+<path d="M115 626V282a245 245 0 0 1 490 0v344" stroke="#d9d8ba" stroke-opacity=".4"/>
+<ellipse cx="380" cy="690" rx="247" ry="32" fill="#1f2e21" opacity=".25" filter="url(#shadow)"/>
+<path d="M139 587h453v94c0 30-453 30-453 0z" fill="url(#stone)"/>
+<ellipse cx="365.5" cy="587" rx="226.5" ry="41" fill="#ece5d2"/>
+<path d="M139 681c0 30 453 30 453 0" stroke="#a9ab90"/>
+<!-- Tall cream pump bottle -->
+<g filter="url(#soft)" transform="rotate(-7 295 400)">
+ <rect x="213" y="270" width="155" height="303" rx="24" fill="url(#cream)"/>
+ <path d="M246 270v-37h90v37" fill="url(#gold)"/>
+ <rect x="264" y="205" width="54" height="31" rx="5" fill="#3c4934"/>
+ <path d="M264 205v-19c0-7 6-12 13-12h99c7 0 11 5 11 11v12h-69v8z" fill="#49543c"/>
+ <rect x="213" y="354" width="155" height="149" fill="#fffaf0" fill-opacity=".82"/>
+ <path d="M284 371h13v12h12v13h-12v12h-13v-12h-12v-13h12z" fill="#ab8e50"/>
+ <text x="291" y="435" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="25" font-style="italic">Para</text>
+ <text x="291" y="456" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="17" letter-spacing="1">VIS’CORPS</text>
+ <path d="M271 470h39" stroke="#bca169"/>
+ <text x="291" y="487" text-anchor="middle" fill="#77795e" font-family="Arial,sans-serif" font-size="7" letter-spacing="2">LE RITUEL DE SOIN</text>
+</g>
+<!-- Olive glass dropper -->
+<g filter="url(#soft)" transform="rotate(8 440 470)">
+ <rect x="390" y="407" width="115" height="185" rx="21" fill="url(#green)"/>
+ <path d="M414 408v-35h67v35" fill="url(#gold)"/>
+ <path d="M423 373v-42a25 25 0 0 1 49 0v42z" fill="#323e2d"/>
+ <rect x="390" y="455" width="115" height="97" fill="#f6edda"/>
+ <text x="447" y="486" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="22" font-style="italic">Para</text>
+ <text x="447" y="505" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="13" letter-spacing="1">VIS’CORPS</text>
+ <path d="M431 517h32" stroke="#bca169"/>
+ <text x="447" y="535" text-anchor="middle" fill="#77795e" font-family="Arial,sans-serif" font-size="6" letter-spacing="1.5">BEAUTÉ AU QUOTIDIEN</text>
+</g>
+<!-- Balm jar -->
+<g filter="url(#soft)">
+ <rect x="212" y="562" width="151" height="90" rx="20" fill="url(#cream)"/>
+ <rect x="208" y="548" width="159" height="28" rx="8" fill="url(#gold)"/>
+ <path d="M215 556h145" stroke="#f2dfb2" stroke-opacity=".6"/>
+ <text x="288" y="604" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="23" font-style="italic">Para</text>
+ <text x="288" y="625" text-anchor="middle" fill="#414b34" font-family="Georgia,serif" font-size="14" letter-spacing="1">VIS’CORPS</text>
+</g>
+<!-- Botanical branch -->
+<path d="M580 691c-31-101-24-205 37-320" stroke="#aab08a" stroke-width="3"/>
+<path d="M565 579c-56-10-75-47-70-94 53 14 78 43 70 94z" fill="#76835b"/>
+<path d="M566 529c49-10 79-45 83-92-56 7-88 39-83 92z" fill="#91a06b"/>
+<path d="M580 469c-38-14-54-44-49-80 36 14 59 42 49 80z" fill="#7f8d5e"/>
+<path d="M593 422c47-6 68-36 72-73-44 7-71 32-72 73z" fill="#98a772"/>
+<path d="M617 374c-25-23-25-54-7-82 27 24 28 52 7 82z" fill="#a8b17b"/>
+</svg>

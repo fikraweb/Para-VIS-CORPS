@@ -5,3 +5,33 @@
 
 @media(max-width:900px){.hero-brand-art{padding:28px 20px}.hero-logo{max-width:360px}}
 @media(max-width:600px){.hero-brand-art{padding:28px 35px 24px}.hero-logo{max-width:310px}.hero-logo-caption{font-size:8px;letter-spacing:2px}footer .brand-logo{width:76px;height:76px}}
+
+/* Editorial hero */
+.hero-editorial{background:#f8f5ee;grid-template-columns:1.04fr 1fr;min-height:620px;position:relative}
+.hero-editorial .hero-copy{padding:82px 7% 32px 10%;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.hero-kicker{font-size:9px;letter-spacing:2px;display:flex;align-items:center;gap:11px;color:#777b61;margin-bottom:31px;font-weight:600}
+.hero-kicker>span{width:7px;height:7px;border-radius:50%;background:#a78a52;box-shadow:0 0 0 5px #ac915712}
+.hero-editorial h1{font-size:clamp(43px,4.5vw,66px);line-height:1.12;letter-spacing:-2px;margin-bottom:25px;color:#343f2b}
+.hero-editorial h1 em{color:#8a8762}
+.hero-editorial .hero-copy>p{font-size:14px;line-height:1.95;max-width:355px;color:#7d8070;margin-bottom:28px}
+.hero-actions{display:flex;align-items:center;gap:23px;flex-wrap:wrap}
+.hero-editorial .button{margin:0;padding:18px 24px;gap:24px;background:#3d4a33;border-color:#3d4a33}
+.hero-editorial .button:hover{background:#536046}
+.hero-secondary{font-size:11px;border-bottom:1px solid #bcb59b;padding:10px 0;display:flex;gap:14px;align-items:center}
+.hero-signature{display:flex;align-items:center;gap:14px;margin-top:38px;font-size:10px;letter-spacing:1px;color:#8b8d7a}
+.signature-line{height:1px;width:32px;background:#b7a575}
+.hero-signature i{font-style:normal;margin:0 9px;color:#ac945b}
+.hero-footnote{font-size:7px;letter-spacing:1.5px;color:#989a89;margin-top:53px}
+.hero-footnote>span{color:#a48e5b;margin-right:10px}
+.hero-scene{position:relative;background:#3d4a37;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:620px}
+.hero-scene::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,#81906a40,transparent 70%);z-index:-1}
+.hero-scene>img{width:100%;height:100%;max-height:620px;object-fit:contain;position:relative;z-index:1}
+.scene-word{position:absolute;font:italic 84px Georgia,serif;color:#e3ddc117;top:15px;left:28px;letter-spacing:-4px;z-index:0}
+.scene-label{position:absolute;left:22px;bottom:38px;display:flex;align-items:center;gap:12px;background:#fffcf0e8;padding:17px 23px;z-index:2;box-shadow:0 8px 30px #1a251a15;border:1px solid #f5eedc80}
+.scene-label-icon{font-size:31px;color:#a98e54}
+.scene-label>div{font:italic 19px Georgia,serif;color:#465039}
+.scene-label small{font:7px Arial,sans-serif;letter-spacing:1.5px;margin-top:7px;color:#92927c}
+.scene-index{position:absolute;right:16px;top:38px;writing-mode:vertical-rl;color:#d5d6bb80;font-size:7px;letter-spacing:2px;z-index:2}
+@media(min-width:1500px){.hero-editorial .hero-copy{padding-left:12%}}
+@media(max-width:1000px){.hero-editorial .hero-copy{padding:60px 7% 30px}.hero-editorial h1{font-size:48px}.hero-kicker{font-size:8px;letter-spacing:1.4px}.hero-actions{gap:15px}.hero-editorial .button{padding:16px 18px;font-size:11px}.hero-scene,.hero-editorial{min-height:560px}.hero-footnote{font-size:6px}.scene-label{left:16px;padding:15px 17px;bottom:30px}.scene-label>div{font-size:17px}}
+@media(max-width:600px){.hero-editorial{grid-template-columns:1fr;min-height:0}.hero-editorial .hero-copy{padding:40px 6% 30px}.hero-kicker{font-size:7px;letter-spacing:1.5px;margin-bottom:26px}.hero-editorial h1{font-size:43px;letter-spacing:-1.6px;margin-bottom:19px}.hero-editorial .hero-copy>p{font-size:13px;line-height:1.9;max-width:310px;margin-bottom:25px}.hero-actions{gap:20px}.hero-editorial .button{font-size:10px;padding:16px 17px;gap:18px}.hero-secondary{font-size:10px;gap:8px}.hero-signature{margin-top:28px;font-size:9px}.hero-footnote{display:none}.hero-scene{min-height:0;height:410px}.hero-scene>img{width:auto;height:100%;max-width:100%}.scene-word{font-size:65px;top:10px;left:20px}.scene-label{left:20px;bottom:20px;padding:12px 16px;gap:10px}.scene-label-icon{font-size:27px}.scene-label>div{font-size:17px}.scene-label small{font-size:6px;letter-spacing:1.1px}.scene-index{right:13px;top:25px;font-size:6px}}
