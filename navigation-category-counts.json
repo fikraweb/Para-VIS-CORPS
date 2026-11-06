@@ -1,0 +1,54 @@
+{
+  "K-beauty": {
+    "products": 576,
+    "formats": 586
+  },
+  "Visages": {
+    "products": 2998,
+    "formats": 3016
+  },
+  "Cheveux": {
+    "products": 1391,
+    "formats": 1403
+  },
+  "Maquillage": {
+    "products": 618,
+    "formats": 663
+  },
+  "Corps & Bains": {
+    "products": 1232,
+    "formats": 1259
+  },
+  "Maman & Bébés": {
+    "products": 668,
+    "formats": 701
+  },
+  "Homme": {
+    "products": 167,
+    "formats": 167
+  },
+  "Dentaire": {
+    "products": 688,
+    "formats": 692
+  },
+  "Hygiène": {
+    "products": 61,
+    "formats": 64
+  },
+  "Accessoires": {
+    "products": 255,
+    "formats": 272
+  },
+  "Minceur": {
+    "products": 29,
+    "formats": 29
+  },
+  "Sport": {
+    "products": 29,
+    "formats": 39
+  },
+  "Complements Alimentaires": {
+    "products": 538,
+    "formats": 538
+  }
+}

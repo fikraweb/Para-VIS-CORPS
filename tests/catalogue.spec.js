@@ -28,3 +28,17 @@ test('complete imported catalogue, category filtering, pagination and stock mana
  await page.getByLabel('Rechercher une référence').fill(candidate.name);await page.locator('#admin-search').getByRole('button',{name:'Rechercher',exact:true}).click();await page.locator(`[data-edit="${candidate.id}"]`).click();await expect(page.getByLabel('Stock',{exact:true})).toHaveValue('9');await page.getByLabel('Stock',{exact:true}).fill('7');await page.getByRole('button',{name:'Enregistrer',exact:true}).click();await expect(page.locator('dialog')).not.toBeVisible();expect((await (await request.get('/api/products/'+candidate.id)).json()).stock).toBe(7);
  }finally{await request.post('/api/login',{headers:origin,data:{password:'local-test-password-only'}});const restore=await request.post('/api/admin/products',{headers:origin,data:original});expect(restore.ok()).toBeTruthy();}
 });
+
+test('thirteen source categories and both hero wheels remain accessible',async({page,request})=>{
+ const counts=JSON.parse(fs.readFileSync('navigation-category-counts.json','utf8'));
+ const names=Object.keys(counts);
+ for(const name of names){const r=await request.get('/api/products?'+new URLSearchParams({page:1,category:name}));expect(r.ok(),name).toBeTruthy();const data=await r.json();expect(data.total,name).toBe(counts[name].formats);expect(data.items.length,name).toBeGreaterThan(0);}
+ await page.goto('/');await expect(page.locator('.orbit-category')).toHaveCount(13);await expect(page.locator('.orbit-category:visible')).toHaveCount(7);await expect(page.locator('#category-wheel-page')).toHaveText('1 / 2');
+ for(const name of names.slice(0,7))await expect(page.getByRole('button',{name:'Découvrir '+name,exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Catégories suivantes'}).click();await expect(page.locator('.orbit-category:visible')).toHaveCount(6);await expect(page.locator('#category-wheel-page')).toHaveText('2 / 2');
+ for(const name of names.slice(7))await expect(page.getByRole('button',{name:'Découvrir '+name,exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Découvrir Sport',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts.Sport.formats+' références et formats');
+ await page.getByRole('button',{name:'Découvrir Minceur',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts.Minceur.formats+' références et formats');
+ await page.getByRole('button',{name:'Catégories précédentes'}).click();await page.getByRole('button',{name:'Découvrir K-beauty',exact:true}).click();await expect(page.locator('#catalogue-count')).toHaveText(counts['K-beauty'].formats+' références et formats');
+ await expect(page.locator('[data-filter]')).toHaveCount(14);
+});

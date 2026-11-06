@@ -1,3 +1,4 @@
+import { categoryDefinitions } from './categories.js';
 const fields='p.id,p.name,p.brand,p.category,p.price,p.image,p.stock,p.active,p.source_product_id,p.source_variant_id';
 export async function catalogue(db,url,admin=false){
  const search=url.searchParams,where=[admin?'1=1':'p.active=1 AND p.price IS NOT NULL'],values=[];
@@ -9,7 +10,15 @@ export async function catalogue(db,url,admin=false){
  }
  const q=(search.get('q')||'').trim().slice(0,150);
  if(q){where.push('(instr(lower(p.name),lower(?))>0 OR instr(lower(p.brand),lower(?))>0 OR instr(lower(COALESCE(p.sku,\'\')),lower(?))>0)');values.push(q,q,q);}
- const category=search.get('category');if(category&&category!=='Tous'){where.push('p.category=?');values.push(category);}
+ const category=search.get('category');if(category&&category!=='Tous'){
+ const definition=categoryDefinitions.find(c=>c.name===category);
+ if(definition){
+  const aliases=[definition.name,...(definition.aliases||[])];
+  where.push(`((p.source_product_id IS NULL AND p.category IN (${aliases.map(()=>'?').join(',')})) OR EXISTS(SELECT 1 FROM product_collections pc JOIN collections c ON c.id=pc.collection_id WHERE pc.source_product_id=p.source_product_id AND c.handle IN (${definition.handles.map(()=>'?').join(',')})))`);
+  values.push(...aliases,...definition.handles);
+  if(definition.excludeSourceIds?.length){where.push(`(p.source_product_id IS NULL OR p.source_product_id NOT IN (${definition.excludeSourceIds.map(()=>'?').join(',')}))`);values.push(...definition.excludeSourceIds);}
+ }else{where.push('p.category=?');values.push(category);}
+ }
  const collection=search.get('collection');if(collection){where.push('EXISTS(SELECT 1 FROM product_collections pc JOIN collections c ON c.id=pc.collection_id WHERE pc.source_product_id=p.source_product_id AND c.handle=?)');values.push(collection);}
  const condition=where.join(' AND '),paginated=search.has('page');
  const limit=paginated?24:100;

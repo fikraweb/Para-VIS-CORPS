@@ -210,3 +210,15 @@
 .orbit-icon,.orbit-icon img{mix-blend-mode:normal}
 .orbit-icon img{filter:drop-shadow(4px 7px 4px #54402338);image-rendering:auto}
 .orbit-icon::after{background:#55412229;filter:blur(6px)}
+/* Two readable category wheels for the thirteen navigation categories. */
+.orbit-category[hidden]{display:none}
+.wheel-position-0{left:50%;top:9%}.wheel-position-1{left:82.05%;top:24.44%}.wheel-position-2{left:89.97%;top:59.12%}.wheel-position-3{left:67.79%;top:86.94%}.wheel-position-4{left:32.21%;top:86.94%}.wheel-position-5{left:10.03%;top:59.12%}.wheel-position-6{left:17.95%;top:24.44%}
+.wheel-count-6 .wheel-position-0{left:50%;top:9%}.wheel-count-6 .wheel-position-1{left:85.51%;top:29.5%}.wheel-count-6 .wheel-position-2{left:85.51%;top:70.5%}.wheel-count-6 .wheel-position-3{left:50%;top:91%}.wheel-count-6 .wheel-position-4{left:14.49%;top:70.5%}.wheel-count-6 .wheel-position-5{left:14.49%;top:29.5%}
+.category-wheel-controls{display:flex;gap:18px;align-items:center;justify-content:center;margin:20px 0 8px;color:#756742;font-size:10px}
+.category-wheel-controls button{width:37px;height:31px;padding:3px;border:1px solid #b99b5f8c;background:#fff7e4cc;border-radius:5px;box-shadow:0 3px 9px #77613b12}
+.category-wheel-controls button:hover{background:#eedbb2}
+.category-stage .category-orbit{margin-top:32px}
+.orbit-category .orbit-name{max-width:145px}
+@media(max-width:700px){.category-wheel-controls{margin-top:24px}.category-stage .category-orbit{margin-top:29px}.orbit-category .orbit-name{max-width:110px}}
+@media(max-width:400px){.orbit-category .orbit-name{max-width:95px}.category-wheel-controls{margin-top:22px;gap:14px}}
+@media(max-width:360px){.orbit-category .orbit-name{max-width:82px}}
