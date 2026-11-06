@@ -82,3 +82,7 @@ Les paramètres enregistrés dans `store_settings` (migration `0004`) pilotent l
 ### Photos des produits
 
 Dans une fiche produit, « Choisir une photo » ouvre les fichiers de l’appareil, sans saisie d’URL. JPG, PNG et WebP sont acceptés jusqu’à 15 Mo, puis redimensionnés et optimisés dans le navigateur (maximum 350 Ko enregistrés). Pour un produit existant, on peut remplacer la photo principale ou ajouter une vue à la galerie. La migration `0005` conserve les images dans la base D1 existante ; les photos et la fiche sont enregistrées dans un même lot atomique. `/api/images/:id` sert les images publiquement pour les fiches et paniers, avec cache immuable. Les opérations d’écriture restent réservées à la session administrateur. Aucun bucket supplémentaire ni nouvelle clé API ne sont requis.
+
+### Conservation des variables au déploiement
+
+`keep_vars: true` conserve les variables runtime ajoutées dans le tableau de bord Cloudflare lors des prochains `wrangler deploy`. Enregistrer `ADMIN_PASSWORD` et `SESSION_SECRET` dans **Runtime variables and secrets → Production → Add variable → Secret**, et non comme variables de build. Les secrets sont conservés par Wrangler. Si des valeurs ont déjà été supprimées, les recréer une fois : ce réglage ne peut pas les restaurer. Ne jamais ajouter leurs valeurs au dépôt.
