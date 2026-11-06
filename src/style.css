@@ -206,3 +206,7 @@
 @media(max-width:360px){.orbit-icon{width:63px;height:62px}.orbit-category{min-height:92px;gap:4px}}
 .orbit-category{mix-blend-mode:normal}
 @media(max-width:600px){.category-orbit{aspect-ratio:.9}.hero-category-copy{padding-top:35px}}
+/* Alpha cutouts: preserve opaque packaging and cast shadows around its real silhouette. */
+.orbit-icon,.orbit-icon img{mix-blend-mode:normal}
+.orbit-icon img{filter:drop-shadow(4px 7px 4px #54402338);image-rendering:auto}
+.orbit-icon::after{background:#55412229;filter:blur(6px)}
