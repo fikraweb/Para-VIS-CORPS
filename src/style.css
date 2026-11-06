@@ -304,3 +304,20 @@
 .catalogue{overflow:visible}
 @media(max-width:900px){.catalogue-toolbar{gap:10px;align-items:stretch;padding-top:10px;padding-bottom:12px}.catalogue-toolbar .tabs{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#b4a278 transparent;gap:4px;padding:3px 0 7px}.catalogue-toolbar .tabs button{flex-shrink:0;white-space:nowrap;padding:10px 12px;min-height:38px;font-size:11px}.catalogue-toolbar .search{max-width:none}.catalogue-toolbar .search input{padding:10px 12px;font-size:12px}}
 @media(max-width:600px){.catalogue-toolbar .tabs button{font-size:10px;padding:9px 11px}.catalogue-toolbar{margin-left:-5.55%;margin-right:-5.55%;padding-left:5%;padding-right:5%}}
+/* One horizontal row of category bubbles, draggable and keyboard accessible. */
+.catalogue-toolbar{gap:18px}
+.category-strip{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.category-strip-arrow{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;padding:0;border:1px solid #bda67880;border-radius:50%;background:linear-gradient(140deg,#fffdf5,#ecddbd);color:#6f774c;font-size:17px;box-shadow:0 3px 7px #81653812}
+.category-strip-arrow:hover:not(:disabled){border-color:#8f7848;box-shadow:0 4px 10px #81653828}
+.category-strip-arrow:disabled{opacity:.3}
+.catalogue-toolbar .tabs{display:flex;flex-wrap:nowrap;align-items:center;gap:9px;overflow-x:auto;overflow-y:hidden;flex:1;min-width:0;padding:6px 3px;scrollbar-width:none;overscroll-behavior-x:contain;cursor:grab;user-select:none;-webkit-user-select:none}
+.catalogue-toolbar .tabs::-webkit-scrollbar{display:none}
+.catalogue-toolbar .tabs.is-dragging{cursor:grabbing}
+.catalogue-toolbar .tabs.is-dragging button{pointer-events:none}
+.catalogue-toolbar .tabs button{flex-shrink:0;white-space:nowrap;display:block;min-height:37px;border:1px solid #c6b38b8c;border-radius:999px;padding:10px 17px;font-size:11px;font-weight:600;line-height:1.1;background:linear-gradient(145deg,#fffcf4,#f0e4cb);color:#5b6540;box-shadow:inset 0 1px 0 #fffef6,0 3px 7px #8b704317;transition:background .2s,border-color .2s,box-shadow .2s}
+.catalogue-toolbar .tabs button:hover{border-color:#9e8a59;background:#f8edcf}
+.catalogue-toolbar .tabs button.selected{background:linear-gradient(140deg,#626d45,#3e4a30);color:#fff9e9;border-color:#4d593a;box-shadow:0 4px 10px #4d583530,inset 0 1px 0 #aab28c66}
+@media(max-width:900px){.catalogue-toolbar{gap:8px}.category-strip{width:100%;gap:8px}.catalogue-toolbar .tabs{padding:6px 2px;gap:8px}.catalogue-toolbar .tabs button{padding:10px 15px;font-size:11px;min-height:37px}}
+@media(max-width:600px){.category-strip{gap:5px}.category-strip-arrow{flex-basis:29px;width:29px;height:29px;font-size:15px}.catalogue-toolbar .tabs{gap:7px;padding:6px 2px}.catalogue-toolbar .tabs button{font-size:10px;padding:10px 14px;min-height:35px}}
+@media(prefers-reduced-motion:reduce){.catalogue-toolbar .tabs button{transition:none}}
+#category-tabs:focus-visible{outline:2px solid #b29a62;outline-offset:2px;border-radius:22px}
