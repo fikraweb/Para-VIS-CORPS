@@ -1,0 +1,3 @@
+# Local only: copy to .dev.vars and replace both values. Never commit .dev.vars.
+ADMIN_PASSWORD="replace-with-a-password-at-least-16-characters"
+SESSION_SECRET="replace-with-a-random-secret-at-least-32-characters"
