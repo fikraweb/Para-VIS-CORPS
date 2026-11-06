@@ -46,3 +46,18 @@
 @media(max-width:350px){.hero-luxury h1{font-size:37px}.hero-luxury .hero-kicker{font-size:6px}.hero-luxury-copy{padding-bottom:370px}.hero-luxury .button{padding:13px;font-size:9px}.hero-actions{gap:12px}.hero-secondary{font-size:8px}.storefront-home .announcement{font-size:6px}.hero-luxury-background{height:455px}}
 
 @media(max-width:600px){.hero-brand-name{display:block;white-space:nowrap;font-size:.9em;line-height:1.2}}
+
+/* Large transparent logo aligned to the left */
+.brand-logo{border-radius:0}
+.storefront-home header{grid-template-columns:1fr auto auto;gap:24px;padding-top:18px;height:270px}
+.storefront-home header>.brand{grid-column:1;justify-self:start}
+.storefront-home header .brand-logo{width:240px;height:240px;border:0;border-radius:0;box-shadow:none;background:transparent}
+.storefront-home .menu-toggle{grid-column:2;justify-self:end;margin-top:28px}
+.storefront-home .header-tools{grid-column:3;margin-top:28px}
+.storefront-home header nav{left:auto;right:5%;top:110px}
+.hero-luxury{min-height:880px}
+.hero-luxury-copy{padding-top:300px}
+@media(min-width:1600px){.storefront-home header .brand-logo{width:265px;height:265px}.hero-luxury-copy{padding-top:330px}.hero-luxury{min-height:920px}}
+@media(max-width:1000px){.storefront-home header .brand-logo{width:215px;height:215px}.hero-luxury-copy{padding-top:275px}.hero-luxury{min-height:830px}}
+@media(max-width:600px){.storefront-home header{height:200px;grid-template-columns:1fr auto auto;gap:10px;padding-top:12px}.storefront-home header .brand-logo{width:175px;height:175px}.storefront-home .menu-toggle{grid-column:2;margin-top:24px;width:30px;padding:4px}.storefront-home .header-tools{grid-column:3;margin-top:24px;gap:6px}.storefront-home header nav{top:90px;left:auto;right:5%;min-width:210px}.hero-luxury-copy{padding-top:220px}.hero-luxury{min-height:970px}}
+@media(max-width:360px){.storefront-home header .brand-logo{width:150px;height:150px}.storefront-home header{gap:6px}.storefront-home .header-search{width:22px}.storefront-home .cart-button{width:30px}.hero-luxury-copy{padding-top:195px}.hero-luxury{min-height:950px}}
