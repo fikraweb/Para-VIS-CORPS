@@ -337,3 +337,32 @@
 #hero-category-track:focus-visible{outline:2px solid #b29a62;outline-offset:2px;border-radius:20px}
 @media(max-width:900px){.hero-bubble-menu{gap:9px}.hero-bubble-menu .category-menu-grid{gap:12px}.hero-bubble-menu .menu-category,.hero-bubble-menu .menu-category:last-child{flex-basis:128px;width:128px;min-width:128px}.hero-bubble-menu .menu-category-image{width:103px;height:103px}.hero-bubble-menu .menu-category-name{font-size:12px}}
 @media(max-width:600px){.hero-bubble-menu{gap:5px}.hero-bubble-arrow{flex-basis:28px;width:28px;height:28px;font-size:15px}.hero-bubble-menu .category-menu-grid{gap:10px;padding:12px 3px 14px}.hero-bubble-menu .menu-category,.hero-bubble-menu .menu-category:last-child{flex-basis:114px;width:114px;min-width:114px;gap:11px}.hero-bubble-menu .menu-category-image{width:94px;height:94px;padding:9px}.hero-bubble-menu .menu-category-name{font-size:11px;min-height:34px}}
+/* Choreographed entrance, suspended motion and restrained gold reflections. */
+.hero-bubble-menu .category-menu-grid{padding-top:21px;padding-bottom:20px}
+.bubble-entrance,.bubble-motion{display:block;width:112px;height:112px;flex-shrink:0;perspective:800px}
+.bubble-motion{transform-style:preserve-3d}
+.hero-bubble-menu .menu-category-image{position:relative;isolation:isolate;overflow:hidden;transition:transform .45s cubic-bezier(.2,.75,.25,1),box-shadow .45s,border-color .35s;background:radial-gradient(ellipse at 30% 20%,#fffdf5f0,#f4e8c88a 55%,#d3b97e85);box-shadow:inset 2px 3px 9px #fffef1c9,inset -3px -5px 8px #b8994c21,0 10px 18px -6px #6a532c45}
+.hero-bubble-menu .menu-category-image::before{content:'';position:absolute;inset:-35%;z-index:3;background:linear-gradient(110deg,transparent 33%,#fffce980 46%,#fffefab8 50%,transparent 64%);opacity:0;pointer-events:none;transform:translateX(-120%) rotate(-16deg)}
+.hero-bubble-menu .menu-category-image::after{content:'';position:absolute;inset:3px;border-radius:50%;border:1px solid #fff9dc9c;border-left-color:#d1b46e70;border-bottom-color:#b6954b40;pointer-events:none;z-index:2}
+.bubble-product{position:relative;display:block;width:100%;height:100%;z-index:1;transition:transform .4s cubic-bezier(.2,.75,.25,1);transform:translateZ(12px)}
+.hero-bubble-menu .menu-category-image img{animation:none;transform:none}
+.hero-bubble-menu .menu-category:hover .menu-category-image,.hero-bubble-menu .menu-category:focus-visible .menu-category-image{transform:translateY(-2px) scale(1.035);box-shadow:inset 2px 3px 9px #fffef1c9,0 17px 25px -7px #6a532c50;border-color:#b08b43}
+.hero-bubble-menu .menu-category:hover .bubble-product,.hero-bubble-menu .menu-category:focus-visible .bubble-product{transform:translateZ(20px) translateY(-2px) scale(1.06)}
+.hero-bubble-menu .menu-category[data-tilt="e"] .bubble-product,.hero-bubble-menu .menu-category[data-tilt="ne"] .bubble-product,.hero-bubble-menu .menu-category[data-tilt="se"] .bubble-product{transform:translateZ(22px) translateY(-2px) rotateY(8deg) rotateZ(1deg) scale(1.06)}
+.hero-bubble-menu .menu-category[data-tilt="w"] .bubble-product,.hero-bubble-menu .menu-category[data-tilt="nw"] .bubble-product,.hero-bubble-menu .menu-category[data-tilt="sw"] .bubble-product{transform:translateZ(22px) translateY(-2px) rotateY(-8deg) rotateZ(-1deg) scale(1.06)}
+.hero-bubble-menu .menu-category-name{transition:box-shadow .35s,border-color .35s,background .35s}
+.hero-bubble-menu .menu-category:hover .menu-category-name{border-color:#a5884e;box-shadow:inset 0 1px 0 #fffef7,0 5px 12px #8e6e3526}
+.bubble-sequence-0{--arrival:0ms;--phase:-.8s;--cycle:6.8s}.bubble-sequence-1{--arrival:75ms;--phase:-2.1s;--cycle:7.4s}.bubble-sequence-2{--arrival:150ms;--phase:-3.5s;--cycle:8s}.bubble-sequence-3{--arrival:225ms;--phase:-1.4s;--cycle:7.1s}.bubble-sequence-4{--arrival:300ms;--phase:-4.2s;--cycle:7.8s}.bubble-sequence-5{--arrival:375ms;--phase:-2.9s;--cycle:7.6s}.bubble-sequence-6{--arrival:450ms;--phase:-5.1s;--cycle:8.3s}
+@media(prefers-reduced-motion:no-preference){
+ .hero-bubble-menu .bubble-visible .bubble-entrance{animation:bubble-arrive .8s cubic-bezier(.18,.8,.22,1) var(--arrival,0ms) backwards}
+ .hero-bubble-menu .bubble-visible .bubble-motion{animation:bubble-buoyancy var(--cycle,7s) ease-in-out var(--phase,0s) infinite}
+ .hero-bubble-menu .bubble-visible .menu-category-image::before{animation:bubble-sheen 12s ease-in-out var(--phase,0s) infinite}
+ .hero-bubble-menu .menu-category:hover .bubble-motion,.hero-bubble-menu .menu-category:focus-within .bubble-motion,.hero-bubble-menu .is-dragging .bubble-motion,.hero-bubble-menu .bubble-paused .bubble-motion,.hero-bubble-menu .bubble-paused .menu-category-image::before{animation-play-state:paused}
+ @keyframes bubble-arrive{from{opacity:0;transform:translateY(16px) scale(.88) rotateX(10deg)}to{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}
+ @keyframes bubble-buoyancy{0%,100%{transform:translate3d(-1px,1px,0) rotateZ(-.7deg)}48%{transform:translate3d(2px,-5px,8px) rotateZ(.8deg)}}
+ @keyframes bubble-sheen{0%,65%{opacity:0;transform:translateX(-120%) rotate(-16deg)}70%{opacity:.12}77%{opacity:.55}84%,100%{opacity:0;transform:translateX(120%) rotate(-16deg)}}
+}
+@media(max-width:900px){.bubble-entrance,.bubble-motion{width:103px;height:103px}}
+@media(max-width:600px){.bubble-entrance,.bubble-motion{width:94px;height:94px}}
+@media(prefers-reduced-motion:reduce){.bubble-entrance,.bubble-motion,.bubble-product{animation:none!important;transform:none!important;transition:none!important}.hero-bubble-menu .menu-category-image::before{display:none}.hero-bubble-menu .menu-category:hover .menu-category-image{transform:none}}
+@media(prefers-reduced-motion:no-preference){.hero-bubble-menu .menu-category:hover .menu-category-image::before,.hero-bubble-menu .menu-category:focus-visible .menu-category-image::before{animation:bubble-hover-sheen .85s ease-out both}@keyframes bubble-hover-sheen{0%{opacity:0;transform:translateX(-120%) rotate(-16deg)}45%{opacity:.5}100%{opacity:0;transform:translateX(120%) rotate(-16deg)}}}
