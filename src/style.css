@@ -165,3 +165,18 @@
 .storefront-home header{pointer-events:none}
 .storefront-home header>.brand,.storefront-home header .menu-toggle,.storefront-home header .header-tools,.storefront-home header nav{pointer-events:auto}
 .orbit-icon img{border-radius:50%;clip-path:circle(49% at 50% 50%)}
+/* Boutique bags, prominent category names and animated brand centerpiece */
+.orbit-category{width:122px;min-height:136px;gap:11px}
+.orbit-icon{width:88px;height:89px;margin-top:12px;border-radius:5px 5px 13px 13px;background:linear-gradient(120deg,#fffcf3,#eee0bf 72%,#d4ba84);border:1px solid #b99b60;box-shadow:inset 4px 0 7px #fff7e599,inset -5px 0 7px #ad8c4c26,0 4px 0 #bda16a70,0 15px 23px -7px #5f4a2f4d}
+.orbit-icon::before{inset:auto;left:28%;top:-17px;width:44%;height:27px;border:2px solid #a4884e;border-bottom:0;border-radius:20px 20px 0 0;background:none;box-shadow:inset 1px 0 0 #fff8e3;transform:translateZ(3px)}
+.orbit-icon::after{left:15%;right:15%;bottom:6%;height:5%;background:#8e733a35;filter:blur(3px);border-radius:50%}
+.orbit-icon img{border-radius:4px;clip-path:none;inset:10% 9% 9%;width:82%;height:81%;object-fit:contain}
+.orbit-name{font-size:14px;font-weight:700;line-height:1.2;max-width:122px;letter-spacing:.1px;color:#414c2c;text-shadow:0 1px 2px #fff5df}
+.orbit-center{padding:8px;gap:6px;background:radial-gradient(circle at 40% 30%,#fff8e999,#e9d5a54d);border-color:#baa06a70;box-shadow:inset 0 1px 6px #fffef380,0 15px 28px #84653a24}
+.orbit-brand-logo{display:block;width:87%;height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 5px 4px #77592b28);transform-origin:center}
+.orbit-center small{font-size:6px;letter-spacing:1.2px;font-weight:600}
+@media(prefers-reduced-motion:no-preference){.orbit-brand-logo{animation:brand-float-glow 6s ease-in-out infinite}@keyframes brand-float-glow{0%,100%{transform:translateY(0) rotateY(-9deg);filter:drop-shadow(0 5px 4px #77592b28)}50%{transform:translateY(-5px) rotateY(9deg);filter:drop-shadow(0 10px 7px #aa7d3a40)}}}
+@media(max-width:1000px){.orbit-category{width:94px;min-height:108px;gap:8px}.orbit-icon{width:62px;height:65px;margin-top:10px}.orbit-icon::before{top:-13px;height:20px;border-width:1.5px}.orbit-name{font-size:11px;max-width:94px}.orbit-center{gap:3px;padding:6px}.orbit-center small{font-size:5px;letter-spacing:.6px}}
+@media(max-width:700px){.orbit-icon{width:65px;height:69px}.orbit-category{width:98px;min-height:113px}.orbit-name{font-size:12px;max-width:98px}.orbit-brand-logo{width:86%}}
+@media(max-width:400px){.orbit-icon{width:57px;height:61px;margin-top:9px}.orbit-category{width:82px;min-height:98px;gap:8px}.orbit-name{font-size:10px;max-width:82px}.orbit-center small{font-size:4px;letter-spacing:.4px}}
+@media(max-width:360px){.orbit-icon{width:48px;height:52px;margin-top:8px}.orbit-icon::before{top:-11px;height:17px}.orbit-category{width:72px;min-height:89px;gap:7px}.orbit-name{font-size:9px;max-width:72px}.orbit-center{padding:5px;gap:2px}.orbit-center small{font-size:3.5px}}

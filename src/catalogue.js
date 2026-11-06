@@ -15,7 +15,8 @@ export async function catalogue(db,url,admin=false){
  const limit=paginated?24:100;
  const total=paginated?(await db.prepare('SELECT COUNT(*) AS n FROM products p WHERE '+condition).bind(...values).first()).n:0;
  const pages=Math.max(1,Math.ceil(total/limit));const page=Math.min(pages,Math.max(1,Math.floor(Number(search.get('page'))||1)));
- const items=(await db.prepare(`SELECT ${fields} FROM products p WHERE ${condition} ORDER BY p.id DESC LIMIT ? OFFSET ?`).bind(...values,limit,paginated?(page-1)*limit:0).all()).results;
+ const order=!admin&&paginated&&(!category||category==='Tous')?"(p.category='Autres soins') DESC,p.id DESC":'p.id DESC';
+ const items=(await db.prepare(`SELECT ${fields} FROM products p WHERE ${condition} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...values,limit,paginated?(page-1)*limit:0).all()).results;
  if(!paginated)return items;
  const result={items,total,page,pages};
  if(admin)result.published=(await db.prepare('SELECT COUNT(*) AS n FROM products WHERE active=1').first()).n;

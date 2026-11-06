@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const manifest=JSON.parse(fs.readFileSync('catalogue-manifest.json','utf8'));
 const origin={Origin:'http://localhost:8788'};
 test('complete imported catalogue, category filtering, pagination and stock management',async({page,request})=>{
- const first=await (await request.get('/api/products?page=1')).json();expect(first.total).toBeGreaterThanOrEqual(manifest.sellable_formats);expect(first.items).toHaveLength(24);expect(first.pages).toBeGreaterThan(500);
+ const first=await (await request.get('/api/products?page=1')).json();expect(first.total).toBeGreaterThanOrEqual(manifest.sellable_formats);expect(first.items).toHaveLength(24);expect(first.pages).toBeGreaterThan(500);expect(first.items.every(p=>p.category==='Autres soins')).toBeTruthy();
  const second=await (await request.get('/api/products?page=2')).json();expect(first.items.map(p=>p.id).filter(id=>second.items.some(p=>p.id===id))).toHaveLength(0);
  const last=await (await request.get('/api/products?page=999999')).json();expect(last.page).toBe(last.pages);expect(last.items.length).toBeGreaterThan(0);
  const collections=await (await request.get('/api/collections')).json();expect(collections).toHaveLength(manifest.collections);
